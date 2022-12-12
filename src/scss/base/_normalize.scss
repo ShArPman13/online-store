@@ -1,0 +1,228 @@
+/* Нормолайз к css: */
+*,
+*::before,
+*::after {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+html,
+body {
+  min-height: 100vh;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: normal;
+  color: rgb(255 255 255);
+  scroll-behavior: smooth;
+}
+
+/* Нормолайз к css: */
+
+/* Убираем границу у place-holder при нажатии */
+// .input-text:focus {
+//   outline: 0;
+//   outline-offset: 0;
+// }
+
+/* Убираем стрелки из INPUT type NUMBER */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  appearance: textfield;
+}
+
+/* Убираем стрелки из INPUT type NUMBER */
+
+/* Убираем place-holder текст при нажатии */
+.input-text:focus::input-placeholder {
+  color: transparent;
+}
+
+.input-text:focus::placeholder {
+  border: 0;
+  color: transparent;
+}
+
+.input-text:focus:placeholder {
+  border: 0;
+  color: transparent;
+}
+
+.input-text:focus:input-placeholder {
+  border: 0;
+  color: transparent;
+}
+
+/* плавное появление placeholder */
+input::input-placeholder {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+input::placeholder {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+input:placeholder {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+input:input-placeholder {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+input:focus::input-placeholder {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+input:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+input:focus:placeholder {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+input:focus:input-placeholder {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Отмена default стилей на radio button */
+// input {
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   appearance: none;
+// }
+
+/* Отмена default стилей на radio button */
+
+/* Отмена default стилей на INPUT RANGE */
+input[type="range"] {
+  appearance: none;
+
+  /* Скрывает слайдер, чтобы можно было создать свой */
+  width: 100%;
+
+  /* Указание параметра ширины требуется для Firefox. */
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-ms-track {
+  /* Скрывает слайдер, чтобы можно было добавить собственные стили. */
+  border-color: transparent;
+  width: 100%;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Отмена default стилей на INPUT RANGE */
+
+/* СТИЛИЗУЕМ INPUT RANGE */
+/* Специальные правила для браузеров на движках WebKit/Blink */
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  border-radius: 5px;
+  width: 115px;
+  height: 6px;
+  background: rgb(254 144 19 / 100%);
+  cursor: pointer;
+
+  @media screen and (max-width: 1225px) {
+    width: 75px;
+  }
+}
+
+/* Тоже самое для Firefox */
+input[type="range"]::-moz-range-thumb {
+  border-radius: 5px;
+  width: 16px;
+  height: 36px;
+  background: rgb(254 144 19 / 100%);
+  cursor: pointer;
+}
+
+/* Тоже самое для IE */
+input[type="range"]::-ms-thumb {
+  border-radius: 5px;
+  width: 16px;
+  height: 36px;
+  background: rgb(254 144 19 / 100%);
+  cursor: pointer;
+}
+
+/* СТИЛИЗУЕМ INPUT RANGE */
+
+/* --------------------------------------style standart SCROLL BAR---------------------------------------- */
+.scroll-block {
+  overflow-y: scroll;
+
+  // height: 70px;
+  // width: 340px;
+  background: transparent;
+
+  // border:1px solid;
+}
+
+.scroll-block::-webkit-scrollbar-track {
+  border-radius: 4px;
+}
+
+.scroll-block::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-block::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #6a7d9b;
+
+  &:hover {
+    background: #f0f2f5;
+  }
+}
+
+/* --------------------------------------style standart SCROLL BAR---------------------------------------- */
