@@ -60,7 +60,7 @@ const baseConfig = {
       filename: 'index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: '[name][contenthash].css',
+      filename: 'style.css',
     }),
     new CleanWebpackPlugin(),
     new ESLintPlugin({
