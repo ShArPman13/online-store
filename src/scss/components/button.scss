@@ -1,0 +1,9 @@
+.main-container__button {
+  width: 250px;
+  height: 100px;
+  background-color: rgb(85 217 93);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
