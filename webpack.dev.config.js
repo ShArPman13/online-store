@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    port: 8013,
+    port: 8015,
     static: {
       directory: path.join(__dirname, '../dist'),
     },
