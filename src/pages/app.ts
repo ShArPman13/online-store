@@ -25,15 +25,20 @@ export class App {
 
     if (page) {
       const pageHtml = page.render();
-      App.container.append(this.header.render(), pageHtml);
+      const containerMain: HTMLElement = document.createElement('main');
+      containerMain.id = 'root';
+      containerMain.append(pageHtml);
+      App.container.append(this.header.render(), containerMain);
     }
   }
 
   private enableRouteChange() {
-    window.addEventListener('hashchange', () => {
+    const loadPage = () => {
       const hash = window.location.hash.slice(1);
       this.renderNewPage(hash);
-    });
+    };
+    window.addEventListener('hashchange', loadPage);
+    window.addEventListener('load', loadPage);
   }
 
   constructor() {
