@@ -4,11 +4,13 @@ import { Page } from '../core/templates/page';
 import { Store } from './store/Store';
 import { PageIds } from '../types/PageIds';
 import { Header } from '../core/components/header';
+import ErrorPage, { ErrorTypes } from './error/Error';
 
 export class App {
   private static container: HTMLElement = document.body;
   private initialPage: HomePage;
   private header: Header;
+  // private errorPage: ErrorPage;
 
   renderNewPage(idPageSource: string) {
     const idPage = idPageSource.toLowerCase();
@@ -21,6 +23,8 @@ export class App {
       page = new Basket(idPage);
     } else if (idPage === PageIds.StorePage) {
       page = new Store(idPage);
+    } else {
+      page = new ErrorPage(idPage, ErrorTypes.Error_404);
     }
 
     if (page) {
