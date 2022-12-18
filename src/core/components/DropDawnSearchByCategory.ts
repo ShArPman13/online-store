@@ -1,19 +1,27 @@
 import dataJSON from '../../assets/data/data.json';
 import { IData } from '../../types/dataJSON';
+import { filterCategory } from '../utilities/filterCategory';
 
 export class DropDawnSearchByCategory {
   container = document.createElement('div');
   categories;
   data: IData[] = dataJSON.products;
   classPrefix;
+  private inputCheckedSet: Set<string> = new Set();
+  private inputCheckedArray: string[] = [];
+  filteredObject: IData[] | null;
+  callBack: (arg0: IData[]) => void;
 
-  constructor(categories: (keyof IData)[], classPrefix: string) {
+  constructor(categories: (keyof IData)[], classPrefix: string, filterCallBack: (arg0: IData[]) => void) {
     this.categories = categories;
     this.classPrefix = classPrefix;
+    this.filteredObject = filterCategory(null, this.data);
+    this.callBack = filterCallBack;
   }
 
   dropDownList() {
     this.container.className = 'drop-down-container dd-trigger';
+    this.container.innerHTML = '';
 
     const select = document.createElement('ul');
     select.className = 'drop-down__select dd-trigger';
@@ -25,6 +33,19 @@ export class DropDawnSearchByCategory {
       input.className = 'drop-down__input dd-trigger';
       input.type = 'checkbox';
       input.id = category;
+      input.addEventListener('change', () => {
+        if (input.checked === true) {
+          this.inputCheckedSet.add(input.id);
+          this.inputCheckedArray = [...this.inputCheckedSet];
+          this.filteredObject = filterCategory(this.inputCheckedArray, this.data);
+          this.callBack(this.filteredObject);
+        } else {
+          this.inputCheckedSet.delete(input.id);
+          this.inputCheckedArray = [...this.inputCheckedSet];
+          this.filteredObject = filterCategory(this.inputCheckedArray, this.data);
+          this.callBack(this.filteredObject);
+        }
+      });
 
       const inputLabel = document.createElement('label');
       inputLabel.className = 'drop-down__input-label dd-trigger';
@@ -90,4 +111,8 @@ export class DropDawnSearchByCategory {
         return res;
     }
   };
+
+  getFilters(): IData[] | null {
+    return this.filteredObject;
+  }
 }
