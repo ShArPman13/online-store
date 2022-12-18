@@ -6,17 +6,18 @@ export class goodCardSmall {
   price;
   brand;
   title;
+  id;
 
   constructor(card: IData) {
     this.images = card.images;
     this.price = card.price;
     this.brand = card.brand;
     this.title = card.title;
+    this.id = card.id;
   }
 
   render() {
-    this.container.className = 'card-small-container';
-
+    this.container.className = `card-small-container ${this.id}`;
     const imageContainer = document.createElement('div');
     imageContainer.className = 'card__image-container';
 
