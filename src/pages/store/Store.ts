@@ -13,7 +13,8 @@ export class Store extends Page {
     classPrefixForBrand: '_brand',
   };
 
-  filteredObject: IData[] = data;
+  filteredObjectCategory: IData[] = [];
+  filteredObjectBrand: IData[] = [];
 
   dropDawnSearchByCategory: DropDawnSearchByCategory;
   dropDawnSearchByBrand: DropDawnSearchByCategory;
@@ -21,7 +22,8 @@ export class Store extends Page {
   constructor(id: string) {
     super(id);
     this.container.className = 'main-container';
-    this.filteredObject;
+    this.filteredObjectCategory;
+    this.filteredObjectBrand;
 
     this.dropDawnSearchByCategory = new DropDawnSearchByCategory(
       this.categoryArray(),
@@ -55,8 +57,6 @@ export class Store extends Page {
       const card = new goodCardSmall(item);
       cardContainer.append(card.render());
     });
-    // cardContainer.innerHTML = '';
-    // cardContainer.append()
     return cardContainer;
   };
 
@@ -69,10 +69,14 @@ export class Store extends Page {
   };
 
   filterCategory = (goodsByCategory: IData[]) => {
-    goodsByCategory.length === 0 ? this.filter(data) : this.filter(goodsByCategory);
+    this.filteredObjectCategory = [...goodsByCategory];
+    this.bindFiltres();
+    // goodsByCategory.length === 0 ? this.filter(data) : this.filter(goodsByCategory);
   };
   filterBrand = (goodsByBrand: IData[]) => {
-    goodsByBrand.length === 0 ? this.filter(data) : this.filter(goodsByBrand);
+    this.filteredObjectBrand = [...goodsByBrand];
+    this.bindFiltres();
+    // goodsByBrand.length === 0 ? this.filter(data) : this.filter(goodsByBrand);
   };
 
   filter(items: IData[]) {
@@ -81,5 +85,16 @@ export class Store extends Page {
       const card = new goodCardSmall(item);
       (<HTMLDivElement>document.querySelector('.container-cards')).append(card.render());
     });
+  }
+
+  bindFiltres() {
+    if (this.filteredObjectCategory.length === 0 && this.filteredObjectBrand.length === 0) {
+      console.log('render All DATA');
+      this.filter(data);
+    } else {
+      // const res = data.filter((item) => { });
+      // console.log(res);
+      // this.filter(res);
+    }
   }
 }

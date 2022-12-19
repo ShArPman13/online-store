@@ -13,6 +13,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   margin-top: 20px;
+  width: 940px;
+  max-width: 1000px;
   gap: 20px;
 }
 
