@@ -10,4 +10,5 @@ export interface IData {
   category: string;
   thumbnail: string;
   images: string[];
+  amount?: number;
 }
