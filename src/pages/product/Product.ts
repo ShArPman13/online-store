@@ -169,12 +169,6 @@ export class Product extends Page {
       title,
       this.chooseButton()
     );
-    // const bottomContainer = document.createElement('div');
-    // bottomContainer.className = 'card__bottom-container';
-
-    // bottomContainer.append(textContainer, this.addToBasket());
-
-    // this.container.append(imageContainer, bottomContainer);
     return this.container;
   }
 }
