@@ -19,3 +19,15 @@
   display: flex;
   gap: 10px;
 }
+
+.header__basket-container {
+  display: flex;
+}
+
+.basket-container__info {
+  margin: 0 10px 0 30px;
+}
+
+.basket-container__score {
+  font-size: 20px;
+}

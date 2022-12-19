@@ -6,17 +6,18 @@ export class goodCardSmall {
   price;
   brand;
   title;
+  id;
 
   constructor(card: IData) {
     this.images = card.images;
     this.price = card.price;
     this.brand = card.brand;
     this.title = card.title;
+    this.id = card.id;
   }
 
   render() {
-    this.container.className = 'card-small-container';
-
+    this.container.className = `card-small-container ${this.id}`;
     const imageContainer = document.createElement('div');
     imageContainer.className = 'card__image-container';
 
@@ -56,13 +57,26 @@ export class goodCardSmall {
   addToBasket() {
     const basketImg = document.createElement('img');
     basketImg.className = 'bottom-container__basketImg';
-    basketImg.src = '../assets/svg/basket_add.svg';
 
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray !== null) {
+      const locStor = JSON.parse(stringArray);
+      if (locStor.find((i: IData) => i.id == this.id)) {
+        basketImg.src = '../assets/svg/basket_added.svg';
+        basketImg.classList.toggle('in-basket');
+      } else {
+        basketImg.src = '../assets/svg/basket_add.svg';
+      }
+    } else {
+      basketImg.src = '../assets/svg/basket_add.svg';
+    }
     basketImg.addEventListener('click', () => {
       basketImg.classList.toggle('in-basket');
       if (basketImg.classList.contains('in-basket')) {
         basketImg.src = '../assets/svg/basket_added.svg';
-      } else basketImg.src = '../assets/svg/basket_add.svg';
+      } else {
+        basketImg.src = '../assets/svg/basket_add.svg';
+      }
     });
     return basketImg;
   }

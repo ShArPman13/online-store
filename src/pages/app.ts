@@ -5,12 +5,17 @@ import { Store } from './store/Store';
 import { PageIds } from '../types/PageIds';
 import { Header } from '../core/components/header';
 import ErrorPage, { ErrorTypes } from './error/Error';
+import dataJSON from '../assets/data/data.json';
+import { IData } from '../types/dataJSON';
+import { Product } from './product/Product';
+import SelectProduct from './product/Select';
+
+const data: IData[] = dataJSON.products;
 
 export class App {
   private static container: HTMLElement = document.body;
   private initialPage: HomePage;
   private header: Header;
-  // private errorPage: ErrorPage;
 
   renderNewPage(idPageSource: string) {
     const idPage = idPageSource.toLowerCase();
@@ -23,6 +28,11 @@ export class App {
       page = new Basket(idPage);
     } else if (idPage === PageIds.StorePage) {
       page = new Store(idPage);
+    } else if (PageIds.Product.includes(idPage)) {
+      const id = Number(idPage.replace(/[\D]+/g, ''));
+      const findItem = data.find((el) => el.id === id);
+      if (findItem == undefined) return false;
+      page = new Product('123', findItem);
     } else {
       page = new ErrorPage(idPage, ErrorTypes.Error_404);
     }
@@ -34,6 +44,7 @@ export class App {
       containerMain.append(pageHtml);
       App.container.append(this.header.render(), containerMain);
     }
+    SelectProduct.changeCurrentItems();
   }
 
   private enableRouteChange() {
@@ -53,5 +64,7 @@ export class App {
   run() {
     this.renderNewPage('Home-Page');
     this.enableRouteChange();
+    SelectProduct.chooseProduct();
+    SelectProduct.addAndRemoveInBasket();
   }
 }

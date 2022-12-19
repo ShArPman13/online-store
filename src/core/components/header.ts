@@ -32,6 +32,19 @@ export class Header extends ComponentHeaderFooter {
     });
     this.container.innerHTML = '';
     this.container.append(navButtons);
+
+    const basketContainer = document.createElement('div');
+    basketContainer.className = 'header__basket-container';
+    this.container.append(basketContainer);
+
+    const bastetInfo = document.createElement('div');
+    bastetInfo.className = 'basket-container__info';
+    bastetInfo.innerText = 'Basket:';
+
+    const bastetScore = document.createElement('div');
+    bastetScore.className = 'basket-container__score';
+
+    basketContainer.append(bastetInfo, bastetScore);
   }
 
   render() {

@@ -1,0 +1,40 @@
+.basket-item-container {
+  display: flex;
+
+  .basket__image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    width: 200px;
+    height: 200px;
+
+    .basket__image-container__img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
+.basket__text-container {
+  width: 40vw;
+}
+
+.basket__price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .basket__price-container__button-price {
+    display: flex;
+    margin: 20px 0;
+
+    .button-price__amount {
+      margin: 0 10px;
+    }
+  }
+}
+
+.prices-container__total-prices {
+  margin: 10px 0;
+}
