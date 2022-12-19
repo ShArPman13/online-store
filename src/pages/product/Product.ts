@@ -1,6 +1,5 @@
 import { Page } from '../../core/templates/page';
 import { IData } from '../../types/dataJSON';
-import './product.scss';
 
 export class Product extends Page {
   container = document.createElement('div');
@@ -70,7 +69,6 @@ export class Product extends Page {
 
       if (!elem.classList.contains('slider-images__container__img') || elem.classList.contains('active-slider-images'))
         return false;
-      // eslint-disable-next-line no-console
       image.src = (e.target as HTMLMediaElement).currentSrc;
       const listImg = document.querySelectorAll('.slider-images__container');
       listImg.forEach((item) => {
