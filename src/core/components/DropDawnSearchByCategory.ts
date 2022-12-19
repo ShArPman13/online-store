@@ -1,6 +1,6 @@
 import dataJSON from '../../assets/data/data.json';
 import { IData } from '../../types/dataJSON';
-import { filterCategory } from '../utilities/filterCategory';
+import { getFilteredItems } from '../utilities/getFilteredItems';
 
 export class DropDawnSearchByCategory {
   container = document.createElement('div');
@@ -10,12 +10,12 @@ export class DropDawnSearchByCategory {
   private inputCheckedSet: Set<string> = new Set();
   private inputCheckedArray: string[] = [];
   filteredObject: IData[] | null;
-  callBack: (arg0: IData[]) => void;
+  callBack: (arg0: string[]) => void;
 
-  constructor(categories: (keyof IData)[], classPrefix: string, filterCallBack: (arg0: IData[]) => void) {
+  constructor(categories: (keyof IData)[], classPrefix: string, filterCallBack: (arg0: string[]) => void) {
     this.categories = categories;
     this.classPrefix = classPrefix;
-    this.filteredObject = filterCategory(null, this.data);
+    this.filteredObject = getFilteredItems(null, this.data);
     this.callBack = filterCallBack;
   }
 
@@ -37,13 +37,11 @@ export class DropDawnSearchByCategory {
         if (input.checked === true) {
           this.inputCheckedSet.add(input.id);
           this.inputCheckedArray = [...this.inputCheckedSet];
-          this.filteredObject = filterCategory(this.inputCheckedArray, this.data);
-          this.callBack(this.filteredObject);
+          this.callBack(this.inputCheckedArray);
         } else {
           this.inputCheckedSet.delete(input.id);
           this.inputCheckedArray = [...this.inputCheckedSet];
-          this.filteredObject = filterCategory(this.inputCheckedArray, this.data);
-          this.callBack(this.filteredObject);
+          this.callBack(this.inputCheckedArray);
         }
       });
 
@@ -111,8 +109,4 @@ export class DropDawnSearchByCategory {
         return res;
     }
   };
-
-  getFilters(): IData[] | null {
-    return this.filteredObject;
-  }
 }

@@ -3,18 +3,20 @@ import dataJSON from '../../assets/data/data.json';
 import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearchByCategory } from '../../core/components/DropDawnSearchByCategory';
+import { getFilteredItems } from '../../core/utilities/getFilteredItems';
 
 const data: IData[] = dataJSON.products;
 
 export class Store extends Page {
   static textObject = {
     mainTitle: 'Store Page for Online-Store!',
+    noResultText: 'There are no products according the request',
     classPrefixForCategory: '_category',
     classPrefixForBrand: '_brand',
   };
 
-  filteredObjectCategory: IData[] = [];
-  filteredObjectBrand: IData[] = [];
+  filteredArrayCategory: string[] = [];
+  filteredArrayBrand: string[] = [];
 
   dropDawnSearchByCategory: DropDawnSearchByCategory;
   dropDawnSearchByBrand: DropDawnSearchByCategory;
@@ -22,8 +24,8 @@ export class Store extends Page {
   constructor(id: string) {
     super(id);
     this.container.className = 'main-container';
-    this.filteredObjectCategory;
-    this.filteredObjectBrand;
+    this.filteredArrayCategory;
+    this.filteredArrayBrand;
 
     this.dropDawnSearchByCategory = new DropDawnSearchByCategory(
       this.categoryArray(),
@@ -68,33 +70,41 @@ export class Store extends Page {
     return [...new Set(data.map((item) => <keyof IData>item.brand))];
   };
 
-  filterCategory = (goodsByCategory: IData[]) => {
-    this.filteredObjectCategory = [...goodsByCategory];
-    this.bindFiltres();
-    // goodsByCategory.length === 0 ? this.filter(data) : this.filter(goodsByCategory);
+  filterCategory = (goodsByCategory: string[]) => {
+    this.filteredArrayCategory = [...goodsByCategory];
+    this.bindCategoryAndBrandsFiltres();
   };
-  filterBrand = (goodsByBrand: IData[]) => {
-    this.filteredObjectBrand = [...goodsByBrand];
-    this.bindFiltres();
-    // goodsByBrand.length === 0 ? this.filter(data) : this.filter(goodsByBrand);
+  filterBrand = (goodsByBrand: string[]) => {
+    this.filteredArrayBrand = [...goodsByBrand];
+    this.bindCategoryAndBrandsFiltres();
   };
 
   filter(items: IData[]) {
-    (<HTMLDivElement>document.querySelector('.container-cards')).innerHTML = '';
-    items.forEach((item) => {
-      const card = new goodCardSmall(item);
-      (<HTMLDivElement>document.querySelector('.container-cards')).append(card.render());
-    });
+    const containerCards = <HTMLDivElement>document.querySelector('.container-cards');
+    containerCards.innerHTML = '';
+
+    if (items.length === 0) {
+      const noResults = document.createElement('span');
+      noResults.className = 'no-result';
+      noResults.innerText = Store.textObject.noResultText;
+      containerCards.classList.add('no-result');
+      containerCards.append(noResults);
+    } else {
+      items.forEach((item) => {
+        const card = new goodCardSmall(item);
+        containerCards.classList.remove('no-result');
+        containerCards.append(card.render());
+      });
+    }
   }
 
-  bindFiltres() {
-    if (this.filteredObjectCategory.length === 0 && this.filteredObjectBrand.length === 0) {
-      console.log('render All DATA');
+  bindCategoryAndBrandsFiltres() {
+    if (this.filteredArrayCategory.length === 0 && this.filteredArrayBrand.length === 0) {
       this.filter(data);
     } else {
-      // const res = data.filter((item) => { });
-      // console.log(res);
-      // this.filter(res);
+      const arrayCategoryAndBrand = [this.filteredArrayCategory, this.filteredArrayBrand];
+      const resData = getFilteredItems(arrayCategoryAndBrand, data);
+      this.filter(resData);
     }
   }
 }

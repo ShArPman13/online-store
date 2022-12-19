@@ -1,5 +1,3 @@
-import { IData } from '../../types/dataJSON';
-
 export abstract class Page {
   protected container: HTMLElement;
 
