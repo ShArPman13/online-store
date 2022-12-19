@@ -2,12 +2,12 @@
   display: flex;
 
   .basket__image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
     width: 200px;
     height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 20px;
 
     .basket__image-container__img {
       max-width: 100%;
@@ -16,8 +16,8 @@
   }
 }
 
-.basket__text-container{
-  width: 40vw
+.basket__text-container {
+  width: 40vw;
 }
 
 .basket__price-container {
