@@ -1,5 +1,5 @@
 import dataJSON from '../../assets/data/data.json';
-import { IData, localStor } from '../../types/dataJSON';
+import { IData } from '../../types/dataJSON';
 import { Product } from './Product';
 
 const data: IData[] = dataJSON.products;
@@ -70,8 +70,8 @@ export default class SelectProduct {
       // eslint-disable-next-line no-console
       console.log(locStor);
 
-      if (locStor.find((i: localStor) => i.id == id)) {
-        const index: number = locStor.findIndex((item: localStor) => item.id == id);
+      if (locStor.find((i: IData) => i.id == id)) {
+        const index: number = locStor.findIndex((item: IData) => item.id == id);
         locStor.splice(index, 1);
       } else {
         if (findItem !== undefined) {
