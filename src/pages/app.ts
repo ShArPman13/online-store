@@ -44,6 +44,7 @@ export class App {
       containerMain.append(pageHtml);
       App.container.append(this.header.render(), containerMain);
     }
+    SelectProduct.changeCurrentItems();
   }
 
   private enableRouteChange() {
@@ -64,5 +65,6 @@ export class App {
     this.renderNewPage('Home-Page');
     this.enableRouteChange();
     SelectProduct.chooseProduct();
+    SelectProduct.addAndRemoveInBasket();
   }
 }
