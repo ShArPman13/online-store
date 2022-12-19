@@ -3,8 +3,33 @@
   justify-content: center;
 }
 
+.main-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
 .container-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin-top: 20px;
+  width: 940px;
+  max-width: 1000px;
   gap: 20px;
+
+  .no-result {
+    color: rgb(0 0 0);
+  }
+
+  &.no-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 600px;
+  }
+}
+
+.filterContainer {
+  display: flex;
+  gap: 30px;
 }
