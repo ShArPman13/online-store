@@ -67,12 +67,16 @@ export default class SelectProduct {
         return false;
       }
       const locStor = JSON.parse(stringArray);
-      // eslint-disable-next-line no-console
-      console.log(locStor);
 
       if (locStor.find((i: IData) => i.id == id)) {
         const index: number = locStor.findIndex((item: IData) => item.id == id);
-        locStor.splice(index, 1);
+        if (locStor.length === 1) {
+          localStorage.removeItem('onlineStoreShoppingBasket');
+          SelectProduct.changeCurrentItems();
+          return false;
+        } else {
+          locStor.splice(index, 1);
+        }
       } else {
         if (findItem !== undefined) {
           findItem.amount = 1;

@@ -1,0 +1,17 @@
+.basket__info-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.pagination-container__amount-rows {
+  display: flex;
+}
+
+.pagination-container__amount-pages {
+  display: flex;
+}
+
+.amount-pages__page {
+  margin: 0 10px;
+}

@@ -32,6 +32,7 @@ export class BasketItem {
 
   render() {
     this.container.className = `basket-item-container ${this.id}`;
+
     const imageContainer = document.createElement('div');
     imageContainer.className = 'basket__image-container';
 
@@ -125,6 +126,9 @@ export class BasketItem {
     });
 
     buttonMinus.addEventListener('click', () => {
+      // eslint-disable-next-line no-console
+      console.log(123);
+
       const amountProduct = Number(amount.innerText) - 1;
       this.clickButton(amountProduct, amount, price);
       if (amountProduct == 0) {
@@ -133,10 +137,12 @@ export class BasketItem {
           const locStor: IData[] = JSON.parse(stringArray);
           const findIndex = locStor.findIndex((el) => el.id === this.id);
           if (findIndex !== undefined) {
-            locStor.splice(findIndex, 1);
-            localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
-            // this.container.innerHTML = '';
-            // this.render();
+            if (locStor.length === 1) {
+              localStorage.removeItem('onlineStoreShoppingBasket');
+            } else {
+              locStor.splice(findIndex, 1);
+              localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
+            }
             const app = new App();
             app.renderNewPage(window.location.hash.slice(1));
           }

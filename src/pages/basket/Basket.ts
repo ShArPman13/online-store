@@ -13,18 +13,142 @@ export class Basket extends Page {
     super(id);
   }
 
-  render() {
-    this.container.className = 'basket';
+  changeAmountItems() {
+    const inputRows = <HTMLInputElement>document.querySelectorAll('.amount-rows__input')[0];
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray == null) {
+      return;
+    }
+    const locStor: IData[] = JSON.parse(stringArray);
+    if (Number(inputRows.value) < 1) return false;
+    const page = +document.querySelectorAll('.amount-pages__page')[0].innerHTML;
+    const start = (page - 1) * +inputRows.value;
+    const end = +inputRows.value;
+    const newlocStor = locStor.splice(start, end);
+    const block = document.querySelectorAll('.basket-items')[0];
+    const info = document.querySelectorAll('.basket__info-container')[0];
+    block.remove();
+    info.after(this.addProduct(newlocStor));
+  }
+
+  changeInputNumber() {
+    const amountRows = document.createElement('div');
+    amountRows.className = 'pagination-container__amount-rows';
+
+    const textRows = document.createElement('div');
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray == null) {
+      return amountRows;
+    }
+    const locStor: IData[] = JSON.parse(stringArray);
+    textRows.className = 'amount-rows__text';
+    textRows.innerText = 'Item';
+    const inputRows = document.createElement('input');
+    inputRows.className = 'amount-rows__input';
+    inputRows.type = 'number';
+    inputRows.id = 'amount-rows__input';
+    inputRows.value = `${locStor.length}`;
+    amountRows.append(textRows, inputRows);
+
+    inputRows.addEventListener('input', () => {
+      document.querySelectorAll('.amount-pages__page')[0].innerHTML = '1';
+      this.changeAmountItems();
+    });
+
+    return amountRows;
+  }
+
+  pagination() {
+    const infoContainer = document.createElement('div');
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
+    if (stringArray == null) {
+      return infoContainer;
+    }
+
+    infoContainer.className = 'basket__info-container';
+
+    const nameColumn = document.createElement('div');
+    nameColumn.className = 'basket__info-container__name';
+    nameColumn.innerText = 'Product in the basket';
+
+    const amountPages = document.createElement('div');
+    amountPages.className = 'pagination-container__amount-pages';
+
+    const buttonMinus = document.createElement('button');
+    buttonMinus.className = 'amount-rows__button-minus';
+    buttonMinus.innerText = '-';
+
+    const page = document.createElement('div');
+    page.className = 'amount-pages__page';
+    page.innerText = '1';
+
+    const buttonPlus = document.createElement('button');
+    buttonPlus.className = 'amount-rows__button-plus';
+    buttonPlus.innerText = '+';
+
+    amountPages.append(buttonMinus, page, buttonPlus);
+    infoContainer.append(nameColumn, this.changeInputNumber(), amountPages);
+
+    buttonPlus.addEventListener('click', () => {
+      const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+      if (stringArray == null) return;
+      const locStor: IData[] = JSON.parse(stringArray);
+      const input = <HTMLInputElement>document.getElementById('amount-rows__input');
+      const pages = Math.ceil(locStor.length / +input.value);
+      const currentPage = document.querySelectorAll('.amount-pages__page')[0];
+      if (Number(currentPage.innerHTML) === pages) return false;
+      currentPage.innerHTML = `${Number(currentPage.innerHTML) + 1}`;
+      this.changeAmountItems();
+    });
+
+    buttonMinus.addEventListener('click', () => {
+      const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+      if (stringArray == null) return;
+      // const locStor: IData[] = JSON.parse(stringArray);
+      // const input = <HTMLInputElement>document.getElementById('amount-rows__input');
+      // const pages = Math.ceil(locStor.length / +input.value);
+      const currentPage = document.querySelectorAll('.amount-pages__page')[0];
+      if (Number(currentPage.innerHTML) === 1) return false;
+      currentPage.innerHTML = `${Number(currentPage.innerHTML) - 1}`;
+      this.changeAmountItems();
+    });
+
+    return infoContainer;
+  }
+
+  addProduct(newlocStor?: IData[]) {
     const basketItems = document.createElement('div');
     basketItems.className = 'basket-items';
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray == null || stringArray === undefined) {
+      this.container.innerText = 'Basket is empty';
+      return this.container;
+    }
+    let locStor: IData[];
+    if (stringArray !== null) {
+      locStor = JSON.parse(stringArray);
+      if (newlocStor) locStor = newlocStor;
+      locStor.forEach((item) => {
+        const product = new BasketItem(item);
+        basketItems.append(product.render());
+      });
+    }
+    return basketItems;
+  }
+
+  render() {
+    this.container.className = 'basket';
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray == null || stringArray === undefined) {
+      this.container.innerText = 'Basket is empty';
+      return this.container;
+    }
     let locStor: IData[];
     let sum = 0;
     if (stringArray !== null) {
       locStor = JSON.parse(stringArray);
       locStor.forEach((item) => {
-        const product = new BasketItem(item);
-        basketItems.append(product.render());
         if (item.amount !== undefined) {
           sum += item.price * item.amount;
         } else {
@@ -32,6 +156,7 @@ export class Basket extends Page {
         }
       });
     }
+
     const totalContainer = document.createElement('div');
     totalContainer.className = 'basket__prices';
 
@@ -53,8 +178,7 @@ export class Basket extends Page {
     totalByu.innerHTML = `Byu All`;
 
     totalContainer.append(pricesContainer, totalByu);
-
-    this.container.append(basketItems, totalContainer);
+    this.container.append(this.pagination(), this.addProduct(), totalContainer);
 
     return this.container;
   }
