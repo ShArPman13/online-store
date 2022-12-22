@@ -1,6 +1,8 @@
 import { Page } from '../../core/templates/page';
 import { BasketItem } from '../../core/components/basketItem';
 import { IData } from '../../types/dataJSON';
+import { PromoCode } from '../../core/components/promocode';
+import addPricePromo from '../../core/components/addPricePromo';
 
 export class Basket extends Page {
   static textObject = {
@@ -53,6 +55,7 @@ export class Basket extends Page {
     inputRows.addEventListener('input', () => {
       document.querySelectorAll('.amount-pages__page')[0].innerHTML = '1';
       this.changeAmountItems();
+      addPricePromo();
     });
 
     return amountRows;
@@ -100,18 +103,17 @@ export class Basket extends Page {
       if (Number(currentPage.innerHTML) === pages) return false;
       currentPage.innerHTML = `${Number(currentPage.innerHTML) + 1}`;
       this.changeAmountItems();
+      addPricePromo();
     });
 
     buttonMinus.addEventListener('click', () => {
       const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
       if (stringArray == null) return;
-      // const locStor: IData[] = JSON.parse(stringArray);
-      // const input = <HTMLInputElement>document.getElementById('amount-rows__input');
-      // const pages = Math.ceil(locStor.length / +input.value);
       const currentPage = document.querySelectorAll('.amount-pages__page')[0];
       if (Number(currentPage.innerHTML) === 1) return false;
       currentPage.innerHTML = `${Number(currentPage.innerHTML) - 1}`;
       this.changeAmountItems();
+      addPricePromo();
     });
 
     return infoContainer;
@@ -132,6 +134,7 @@ export class Basket extends Page {
       locStor.forEach((item) => {
         const product = new BasketItem(item);
         basketItems.append(product.render());
+        addPricePromo();
       });
     }
     return basketItems;
@@ -167,19 +170,66 @@ export class Basket extends Page {
     totalText.className = 'prices-container__total';
     totalText.innerText = 'Total: ';
 
+    const totalPricesContainer = document.createElement('div');
+    totalPricesContainer.className = 'prices-container__total-prices-container';
+
     const totalPrices = document.createElement('div');
     totalPrices.className = 'prices-container__total-prices';
-    totalPrices.innerHTML = `${sum}`;
+    totalPrices.innerHTML = `${sum}$`;
 
-    pricesContainer.append(totalText, totalPrices);
+    totalPricesContainer.append(totalPrices);
+
+    pricesContainer.append(totalText, totalPricesContainer);
 
     const totalByu = document.createElement('button');
     totalByu.className = 'prices-container__byu';
     totalByu.innerHTML = `Byu All`;
 
     totalContainer.append(pricesContainer, totalByu);
-    this.container.append(this.pagination(), this.addProduct(), totalContainer);
+    this.container.append(this.pagination(), this.addProduct(), this.checkPromoCode(), totalContainer);
 
     return this.container;
+  }
+
+  checkPromoCode() {
+    const promoContainer = document.createElement('div');
+    promoContainer.className = 'basket__promo-container';
+
+    const promoList = document.createElement('div');
+    promoList.className = 'promo-container__list';
+
+    const promoFunctional = document.createElement('div');
+    promoFunctional.className = 'promo-container__functional';
+
+    const functionalInput = document.createElement('input');
+    functionalInput.className = 'promo-container__functional__input';
+    functionalInput.type = 'text';
+    functionalInput.placeholder = 'RS, Stage2, 2023,';
+
+    const functionalButton = document.createElement('button');
+    functionalButton.className = 'promo-container__functional__button';
+    functionalButton.innerText = 'Enter promo code';
+
+    promoFunctional.append(functionalInput, functionalButton);
+    promoContainer.append(promoList, promoFunctional);
+
+    functionalButton.addEventListener('click', () => {
+      const input = <HTMLInputElement>document.querySelectorAll('.promo-container__functional__input')[0];
+      const block = document.querySelectorAll('.promo-container__list')[0];
+      const listPromo = document.querySelectorAll('.list__item__promo-name');
+      for (let i = 0; i < listPromo.length; i++) {
+        if (listPromo[i].innerHTML === input.value) return;
+      }
+      let number = '3';
+      if (input.value === 'RS') number = '10';
+      else if (input.value === 'Stage2') number = '7';
+      else if (input.value === '2023') number = '5';
+      else return;
+      const item = new PromoCode(input.value, number);
+      input.value = '';
+      block.append(item.render());
+      addPricePromo();
+    });
+    return promoContainer;
   }
 }

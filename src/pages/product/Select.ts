@@ -7,9 +7,11 @@ const data: IData[] = dataJSON.products;
 export default class SelectProduct {
   static changeCurrentItems() {
     const bastetScore = document.querySelectorAll('.basket-container__score')[0];
+    const totalAmount = document.querySelectorAll('.basket-container__total-amount')[0];
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
     if (stringArray == null) {
       bastetScore.innerHTML = '0';
+      totalAmount.innerHTML = '0';
       return false;
     }
     const locStor: IData[] = JSON.parse(stringArray);
@@ -17,6 +19,7 @@ export default class SelectProduct {
     if (locStor.length == 0) {
       const current = 0;
       bastetScore.innerHTML = `${current}`;
+      totalAmount.innerHTML = `${current}`;
       return false;
     }
 
@@ -28,6 +31,15 @@ export default class SelectProduct {
         }
       });
     bastetScore.innerHTML = `${current}`;
+    let currentAmount = 0;
+    locStor.forEach((item) => {
+      if (item.amount !== undefined) {
+        currentAmount += item.price * item.amount;
+      } else {
+        currentAmount += item.price;
+      }
+    });
+    totalAmount.innerHTML = `${currentAmount}$`;
   }
   static chooseProduct() {
     document.addEventListener('click', (e: Event) => {
