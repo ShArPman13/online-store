@@ -80,7 +80,6 @@ export class BasketItem {
     if (stringArray !== null) {
       const locStor: IData[] = JSON.parse(stringArray);
       const findIndex = locStor.findIndex((el) => el.id === this.id);
-
       if (findIndex !== undefined) {
         locStor[findIndex].amount = amountProduct;
         price.innerText = `${this.price * amountProduct}$`;

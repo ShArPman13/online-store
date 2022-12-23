@@ -160,7 +160,6 @@ export class Basket extends Page {
         }
       });
     }
-
     const totalContainer = document.createElement('div');
     totalContainer.className = 'basket__prices';
 
