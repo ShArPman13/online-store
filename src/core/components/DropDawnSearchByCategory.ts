@@ -1,27 +1,27 @@
 import dataJSON from '../../assets/data/data.json';
 import { IData } from '../../types/dataJSON';
 import { getFilteredItems } from '../utilities/getFilteredItems';
-import { deleteOneValueFromParamKey, params } from '../utilities/queryParams';
+import { params } from '../utilities/queryParams';
 
 export class DropDawnSearchByCategory {
   container = document.createElement('div');
   categories;
   data: IData[] = dataJSON.products;
   classPrefix;
+  checkboxes: HTMLInputElement[] = [];
 
   private inputCheckedSet: Set<string> = new Set();
   private inputCheckedArray: string[] = [];
   filteredObject: IData[] | null;
-  callBack: (arg0: string[]) => void;
 
-  constructor(categories: (keyof IData)[], classPrefix: string, filterCallBack: (arg0: string[]) => void) {
+  constructor(categories: (keyof IData)[], classPrefix: string) {
     this.categories = categories;
     this.classPrefix = classPrefix;
     this.filteredObject = getFilteredItems(null, this.data);
-    this.callBack = filterCallBack;
   }
 
   dropDownList(listFields?: string[]) {
+    this.checkboxes.length = 0;
     if (!listFields || listFields.length === 0) {
       listFields = [...this.categories];
     }
@@ -40,25 +40,7 @@ export class DropDawnSearchByCategory {
       input.type = 'checkbox';
       input.id = field;
 
-      input.checked = this.inputCheckedArray.includes(input.id) ? true : false;
-
-      input.addEventListener('change', () => {
-        if (input.checked === true) {
-          this.inputCheckedSet.add(input.id);
-
-          params.append(this.classPrefix.slice(1), input.id);
-          window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
-
-          this.inputCheckedArray = [...this.inputCheckedSet];
-          this.callBack(this.inputCheckedArray);
-        } else {
-          deleteOneValueFromParamKey(this.classPrefix.slice(1), input.id);
-
-          this.inputCheckedSet.delete(input.id);
-          this.inputCheckedArray = [...this.inputCheckedSet];
-          this.callBack(this.inputCheckedArray);
-        }
-      });
+      input.checked = params.getAll(this.classPrefix.slice(1)).includes(input.id) ? true : false;
 
       const inputLabel = document.createElement('label');
       inputLabel.className = 'drop-down__input-label dd-trigger';
@@ -71,10 +53,28 @@ export class DropDawnSearchByCategory {
       itemsInCategory.innerText = String(this.itemsInCategory(field, this.classPrefix.slice(1)));
 
       option.append(input, inputLabel, itemsInCategory);
+      this.checkboxes.push(input);
       select.append(option);
     });
 
-    this.container.append(select);
+    const applyButton = document.createElement('button');
+    applyButton.className = 'button-apply';
+    applyButton.innerText = 'Apply';
+    this.container.append(select, applyButton);
+
+    const apply = () => {
+      params.delete(this.classPrefix.slice(1));
+      this.checkboxes.forEach((checkbox) => {
+        if (checkbox.checked === true) {
+          this.inputCheckedSet.add(checkbox.id);
+          this.inputCheckedArray = [...this.inputCheckedSet.add(checkbox.id)];
+          params.append(this.classPrefix.slice(1), checkbox.id);
+        }
+      });
+      window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
+    };
+
+    applyButton.addEventListener('click', apply);
 
     return this.container;
   }
@@ -107,12 +107,10 @@ export class DropDawnSearchByCategory {
 
   itemsInCategory = (cat: keyof IData | string, condition: string) => {
     let res = 0;
-    // console.log(cat);
     switch (condition) {
       case 'category':
         this.data.forEach((item) => {
           if (item.category === cat) {
-            // console.log('cat', this.inputCheckedArray);
             res += 1;
           }
         });
@@ -121,7 +119,6 @@ export class DropDawnSearchByCategory {
       case 'brand':
         this.data.forEach((item) => {
           if (item.brand === cat) {
-            // console.log('brand', this.inputCheckedArray);
             res += 1;
           }
         });

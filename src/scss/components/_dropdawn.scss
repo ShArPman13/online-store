@@ -41,6 +41,7 @@
   left: 0;
   top: 50px;
   display: none;
+  flex-direction: column;
   overflow: auto;
   border-radius: 3px;
   padding: 0 10px;
@@ -74,4 +75,10 @@
 .drop-down__items {
   margin-left: auto;
   color: rgb(184 184 184);
+}
+
+.button-apply {
+  flex-shrink: 0;
+  width: 100px;
+  height: 50px;
 }

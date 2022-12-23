@@ -4,6 +4,7 @@ import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearchByCategory } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
+import { params } from '../../core/utilities/queryParams';
 
 const data: IData[] = dataJSON.products;
 
@@ -15,11 +16,11 @@ export class Store extends Page {
     classPrefixForBrand: '_brand',
   };
 
-  filteredArrayCategory: string[] = [];
-  filteredArrayBrand: string[] = [];
-
   dropDawnSearchByCategory: DropDawnSearchByCategory;
   dropDawnSearchByBrand: DropDawnSearchByCategory;
+
+  categoriesChecked: string[] = [];
+  brandsChecked: string[] = [];
 
   filterContainer = document.createElement('div');
   cardContainer = document.createElement('div');
@@ -27,19 +28,12 @@ export class Store extends Page {
   constructor(id: string) {
     super(id);
     this.container.className = 'main-container';
-    this.filteredArrayCategory;
-    this.filteredArrayBrand;
 
     this.dropDawnSearchByCategory = new DropDawnSearchByCategory(
       this.categoryArray(),
-      Store.textObject.classPrefixForCategory,
-      this.filterCategory
+      Store.textObject.classPrefixForCategory
     );
-    this.dropDawnSearchByBrand = new DropDawnSearchByCategory(
-      this.brandArray(),
-      Store.textObject.classPrefixForBrand,
-      this.filterBrand
-    );
+    this.dropDawnSearchByBrand = new DropDawnSearchByCategory(this.brandArray(), Store.textObject.classPrefixForBrand);
   }
 
   render() {
@@ -55,11 +49,14 @@ export class Store extends Page {
 
   getItemCards = () => {
     this.cardContainer.className = 'container-cards';
-
-    data.forEach((item) => {
-      const card = new goodCardSmall(item);
-      this.cardContainer.append(card.render());
-    });
+    if (params.toString()) {
+      this.applyAllFilters();
+    } else {
+      data.forEach((item) => {
+        const card = new goodCardSmall(item);
+        this.cardContainer.append(card.render());
+      });
+    }
     return this.cardContainer;
   };
 
@@ -94,17 +91,6 @@ export class Store extends Page {
     return [...new Set(res)];
   };
 
-  filterCategory = (goodsByCategory: string[]) => {
-    this.filteredArrayCategory = [...goodsByCategory];
-    this.actualiseBrandDropDown();
-    this.bindCategoryAndBrandsFiltres();
-  };
-  filterBrand = (goodsByBrand: string[]) => {
-    this.filteredArrayBrand = [...goodsByBrand];
-    // this.actualiseCategoryDropDown();
-    this.bindCategoryAndBrandsFiltres();
-  };
-
   filter(items: IData[]) {
     this.cardContainer.innerHTML = '';
 
@@ -123,24 +109,32 @@ export class Store extends Page {
     }
   }
 
-  bindCategoryAndBrandsFiltres() {
-    if (this.filteredArrayCategory.length === 0 && this.filteredArrayBrand.length === 0) {
+  getItemsToRenderAfterFiltres() {
+    if (this.categoriesChecked.length === 0 && this.brandsChecked.length === 0) {
       this.filter(data);
     } else {
-      const arrayCategoryAndBrand = [this.filteredArrayCategory, this.filteredArrayBrand];
+      const arrayCategoryAndBrand = [this.categoriesChecked, this.brandsChecked];
       const resData = getFilteredItems(arrayCategoryAndBrand, data);
       this.filter(resData);
     }
   }
 
-  actualiseBrandDropDown() {
-    const brands = this.brandArrayActualByCategory(this.filteredArrayCategory);
-    this.dropDawnSearchByBrand.clearList();
-    this.dropDawnSearchByBrand.dropDownList(brands);
+  applyAllFilters() {
+    const actualise = () => {
+      this.categoriesChecked = params.getAll('category');
+      this.brandsChecked = params.getAll('brand');
+
+      const brands = this.brandArrayActualByCategory(this.categoriesChecked);
+      this.dropDawnSearchByBrand.clearList();
+      this.dropDawnSearchByBrand.dropDownList(brands);
+
+      const category = this.categoryArrayActualByBrand(this.brandsChecked);
+      this.dropDawnSearchByCategory.clearList();
+      this.dropDawnSearchByCategory.dropDownList(category);
+
+      this.getItemsToRenderAfterFiltres();
+    };
+    actualise();
+    window.addEventListener('hashchange', actualise);
   }
-  // actualiseCategoryDropDown() {
-  //   const category = this.categoryArrayActualByBrand(this.filteredArrayBrand);
-  //   this.dropDawnSearchByCategory.clearList();
-  //   this.dropDawnSearchByCategory.dropDownList(category);
-  // }
 }
