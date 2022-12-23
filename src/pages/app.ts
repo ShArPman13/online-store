@@ -50,7 +50,13 @@ export class App {
   private enableRouteChange() {
     const loadPage = () => {
       const hash = window.location.hash.slice(1);
-      this.renderNewPage(hash);
+
+      if (!hash.includes('?')) {
+        this.renderNewPage(hash);
+      }
+      if (!hash) {
+        window.location.hash = `/home-page`;
+      }
     };
     window.addEventListener('hashchange', loadPage);
     window.addEventListener('load', loadPage);

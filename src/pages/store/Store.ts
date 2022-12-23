@@ -21,6 +21,9 @@ export class Store extends Page {
   dropDawnSearchByCategory: DropDawnSearchByCategory;
   dropDawnSearchByBrand: DropDawnSearchByCategory;
 
+  filterContainer = document.createElement('div');
+  cardContainer = document.createElement('div');
+
   constructor(id: string) {
     super(id);
     this.container.className = 'main-container';
@@ -40,26 +43,24 @@ export class Store extends Page {
   }
 
   render() {
-    const filterContainer = document.createElement('div');
-    filterContainer.className = 'filterContainer';
+    this.filterContainer.className = 'filterContainer';
 
-    filterContainer.append(
-      this.dropDawnSearchByCategory.renderDropDownListWithCaption('category'),
-      this.dropDawnSearchByBrand.renderDropDownListWithCaption('brands')
+    this.filterContainer.append(
+      this.dropDawnSearchByCategory.renderDropDownListWithCaption('Category'),
+      this.dropDawnSearchByBrand.renderDropDownListWithCaption('Brands')
     );
-    this.container.append(filterContainer, this.getItemCards());
+    this.container.append(this.filterContainer, this.getItemCards());
     return this.container;
   }
 
   getItemCards = () => {
-    const cardContainer = document.createElement('div');
-    cardContainer.className = 'container-cards';
+    this.cardContainer.className = 'container-cards';
 
     data.forEach((item) => {
       const card = new goodCardSmall(item);
-      cardContainer.append(card.render());
+      this.cardContainer.append(card.render());
     });
-    return cardContainer;
+    return this.cardContainer;
   };
 
   categoryArray = () => {
@@ -70,30 +71,54 @@ export class Store extends Page {
     return [...new Set(data.map((item) => <keyof IData>item.brand))];
   };
 
+  brandArrayActualByCategory = (categories: string[]) => {
+    const res: string[] = [];
+    data.map((item) => {
+      categories.forEach((element) => {
+        if (item.category === element) {
+          res.push(item.brand);
+        }
+      });
+    });
+    return [...new Set(res)];
+  };
+  categoryArrayActualByBrand = (brands: string[]) => {
+    const res: string[] = [];
+    data.map((item) => {
+      brands.forEach((element) => {
+        if (item.brand === element) {
+          res.push(item.category);
+        }
+      });
+    });
+    return [...new Set(res)];
+  };
+
   filterCategory = (goodsByCategory: string[]) => {
     this.filteredArrayCategory = [...goodsByCategory];
+    this.actualiseBrandDropDown();
     this.bindCategoryAndBrandsFiltres();
   };
   filterBrand = (goodsByBrand: string[]) => {
     this.filteredArrayBrand = [...goodsByBrand];
+    // this.actualiseCategoryDropDown();
     this.bindCategoryAndBrandsFiltres();
   };
 
   filter(items: IData[]) {
-    const containerCards = <HTMLDivElement>document.querySelector('.container-cards');
-    containerCards.innerHTML = '';
+    this.cardContainer.innerHTML = '';
 
     if (items.length === 0) {
       const noResults = document.createElement('span');
       noResults.className = 'no-result';
       noResults.innerText = Store.textObject.noResultText;
-      containerCards.classList.add('no-result');
-      containerCards.append(noResults);
+      this.cardContainer.classList.add('no-result');
+      this.cardContainer.append(noResults);
     } else {
       items.forEach((item) => {
         const card = new goodCardSmall(item);
-        containerCards.classList.remove('no-result');
-        containerCards.append(card.render());
+        this.cardContainer.classList.remove('no-result');
+        this.cardContainer.append(card.render());
       });
     }
   }
@@ -107,4 +132,15 @@ export class Store extends Page {
       this.filter(resData);
     }
   }
+
+  actualiseBrandDropDown() {
+    const brands = this.brandArrayActualByCategory(this.filteredArrayCategory);
+    this.dropDawnSearchByBrand.clearList();
+    this.dropDawnSearchByBrand.dropDownList(brands);
+  }
+  // actualiseCategoryDropDown() {
+  //   const category = this.categoryArrayActualByBrand(this.filteredArrayBrand);
+  //   this.dropDawnSearchByCategory.clearList();
+  //   this.dropDawnSearchByCategory.dropDownList(category);
+  // }
 }
