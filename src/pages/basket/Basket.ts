@@ -3,6 +3,7 @@ import { BasketItem } from '../../core/components/basketItem';
 import { IData } from '../../types/dataJSON';
 import { PromoCode } from '../../core/components/promocode';
 import addPricePromo from '../../core/components/addPricePromo';
+import ModalWindow from '../modalWindow/modalWindow';
 
 export class Basket extends Page {
   static textObject = {
@@ -181,14 +182,26 @@ export class Basket extends Page {
 
     pricesContainer.append(totalText, totalPricesContainer);
 
+    // const totalByu = document.createElement('button');
+    // totalByu.className = 'prices-container__byu';
+    // totalByu.innerHTML = `Byu All`;
+
+    totalContainer.append(pricesContainer, this.clickButtonByu());
+    this.container.append(this.pagination(), this.addProduct(), this.checkPromoCode(), totalContainer);
+
+    return this.container;
+  }
+
+  clickButtonByu() {
     const totalByu = document.createElement('button');
     totalByu.className = 'prices-container__byu';
     totalByu.innerHTML = `Byu All`;
 
-    totalContainer.append(pricesContainer, totalByu);
-    this.container.append(this.pagination(), this.addProduct(), this.checkPromoCode(), totalContainer);
-
-    return this.container;
+    totalByu.addEventListener('click', () => {
+      const modal = new ModalWindow();
+      this.container.append(modal.render());
+    });
+    return totalByu;
   }
 
   checkPromoCode() {
