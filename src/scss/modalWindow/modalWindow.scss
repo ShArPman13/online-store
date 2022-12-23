@@ -1,0 +1,80 @@
+.modul-window {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modul-window-form {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(149 195 235);
+}
+
+.modul-window__containers {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modul-window__input:focus {
+  outline: none;
+}
+
+.input__invalid {
+  border: 2px solid rgb(213 0 0);
+  color: rgb(213 0 0);
+}
+
+.input__valid {
+  border: 2px solid rgb(2 121 2);
+  color: rgb(2 121 2);
+}
+
+.modul-window__card-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-container__card {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 200px;
+  background-color: #e0e0e0;
+}
+
+.card-container__number-container {
+  display: flex;
+  align-items: center;
+}
+
+.card-container__number-container__img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 70px;
+}
+
+.card-container__number-container__img-container__img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.card-container__data-card {
+  display: flex;
+}
+
+.card-container__data-card__date-container {
+  display: flex;
+}
+
+.card-container__data-card__cvv-container {
+  display: flex;
+}
+
+.card-container__number-container__number-block {
+  display: flex;
+}

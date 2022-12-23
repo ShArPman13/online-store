@@ -37,14 +37,21 @@ export class Header extends ComponentHeaderFooter {
     basketContainer.className = 'header__basket-container';
     this.container.append(basketContainer);
 
-    const bastetInfo = document.createElement('div');
-    bastetInfo.className = 'basket-container__info';
-    bastetInfo.innerText = 'Basket:';
+    const basketInfo = document.createElement('div');
+    basketInfo.className = 'basket-container__info';
+    basketInfo.innerText = 'Basket:';
 
     const bastetScore = document.createElement('div');
     bastetScore.className = 'basket-container__score';
 
-    basketContainer.append(bastetInfo, bastetScore);
+    const infoAmount = document.createElement('div');
+    infoAmount.className = 'basket-container__amount';
+    infoAmount.innerText = 'Amount:';
+
+    const totalAmount = document.createElement('div');
+    totalAmount.className = 'basket-container__total-amount';
+
+    basketContainer.append(basketInfo, bastetScore, infoAmount, totalAmount);
   }
 
   render() {
