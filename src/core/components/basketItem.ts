@@ -1,6 +1,7 @@
 import { IData } from '../../types/dataJSON';
 import SelectProduct from '../../pages/product/Select';
 import { App } from '../../pages/app';
+import addPricePromo from './addPricePromo';
 
 export class BasketItem {
   container = document.createElement('div');
@@ -32,6 +33,16 @@ export class BasketItem {
 
   render() {
     this.container.className = `basket-item-container ${this.id}`;
+
+    const serialNumber = document.createElement('div');
+    serialNumber.className = 'basket__serial-number';
+
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray !== null) {
+      const locStor: IData[] = JSON.parse(stringArray);
+      const findIndex = locStor.findIndex((el) => el.id === this.id);
+      serialNumber.innerText = `${findIndex + 1}`;
+    }
     const imageContainer = document.createElement('div');
     imageContainer.className = 'basket__image-container';
 
@@ -59,7 +70,7 @@ export class BasketItem {
 
     textContainer.append(brand, description, discountPercentage);
 
-    this.container.append(imageContainer, textContainer, this.addProduct());
+    this.container.append(serialNumber, imageContainer, textContainer, this.addProduct());
     return this.container;
   }
 
@@ -79,8 +90,9 @@ export class BasketItem {
         locStor.forEach((item) => {
           if (item.amount !== undefined) {
             sum += item.price * item.amount;
+          } else {
+            sum += item.price;
           }
-          sum += item.price;
         });
         totalAmount.innerHTML = `${sum}`;
       }
@@ -91,8 +103,13 @@ export class BasketItem {
     const priceContainer = document.createElement('div');
     priceContainer.className = 'basket__price-container';
 
+    const priceBlock = document.createElement('div');
+    priceBlock.className = 'basket__price-container__price-block';
+
     const price = document.createElement('div');
     price.className = 'basket__price-container__price';
+
+    priceBlock.append(price);
     if (this.amount !== undefined) {
       price.innerText = `${this.price * this.amount}$`;
     } else {
@@ -122,21 +139,25 @@ export class BasketItem {
       if (Number(amount.innerText) == this.stock) return false;
       const amountProduct = Number(amount.innerText) + 1;
       this.clickButton(amountProduct, amount, price);
+      addPricePromo();
     });
 
     buttonMinus.addEventListener('click', () => {
       const amountProduct = Number(amount.innerText) - 1;
       this.clickButton(amountProduct, amount, price);
+      addPricePromo();
       if (amountProduct == 0) {
         const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
         if (stringArray !== null) {
           const locStor: IData[] = JSON.parse(stringArray);
           const findIndex = locStor.findIndex((el) => el.id === this.id);
           if (findIndex !== undefined) {
-            locStor.splice(findIndex, 1);
-            localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
-            // this.container.innerHTML = '';
-            // this.render();
+            if (locStor.length === 1) {
+              localStorage.removeItem('onlineStoreShoppingBasket');
+            } else {
+              locStor.splice(findIndex, 1);
+              localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
+            }
             const app = new App();
             app.renderNewPage(window.location.hash.slice(1));
           }
@@ -145,7 +166,7 @@ export class BasketItem {
     });
 
     buttonPrice.append(buttonMinus, amount, buttonPlus);
-    priceContainer.append(price, buttonPrice, stock);
+    priceContainer.append(stock, buttonPrice, priceBlock);
     return priceContainer;
   }
 }
