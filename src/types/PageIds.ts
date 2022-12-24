@@ -8,8 +8,8 @@ data.forEach((item) => {
 });
 
 export const PageIds: { [props: string]: string | string[] } = {
-  HomePage: 'home-page',
-  BasketPage: 'basket',
-  StorePage: 'store',
+  HomePage: '/home-page',
+  BasketPage: '/basket',
+  StorePage: '/store',
   Product: dataId,
 };
