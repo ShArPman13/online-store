@@ -2,8 +2,19 @@
   position: fixed;
   left: 50%;
   top: 50%;
+  z-index: 10;
   display: flex;
   flex-direction: column;
+}
+
+.modul-window-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 8;
+  width: 100vw;
+  height: 100vh;
+  background-color: #080606d4;
 }
 
 .modul-window-form {
