@@ -38,6 +38,9 @@ export class App {
     }
 
     if (page) {
+      if (page instanceof Store) {
+        page.applyAllFilters();
+      }
       const pageHtml = page.render();
       const containerMain: HTMLElement = document.createElement('main');
       containerMain.id = 'root';
@@ -50,8 +53,18 @@ export class App {
   private enableRouteChange() {
     const loadPage = () => {
       const hash = window.location.hash.slice(1);
-      this.renderNewPage(hash);
+
+      if (!hash) {
+        window.location.hash = `/home-page`;
+      }
+
+      if (!hash.includes('?')) {
+        this.renderNewPage(hash);
+      } else {
+        this.renderNewPage(String(PageIds.StorePage));
+      }
     };
+
     window.addEventListener('hashchange', loadPage);
     window.addEventListener('load', loadPage);
   }
