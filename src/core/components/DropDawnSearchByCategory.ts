@@ -80,8 +80,8 @@ export class DropDawnSearchByCategory {
   }
 
   renderDropDownListWithCaption(name: string) {
-    const container = document.createElement('div');
-    container.className = `caption-container dd-trigger-2${this.classPrefix}`;
+    const containerCaption = document.createElement('div');
+    containerCaption.className = `caption-container dd-trigger-2${this.classPrefix}`;
 
     document.addEventListener('click', (e: MouseEvent) => {
       const target = <HTMLDivElement>e.target;
@@ -101,8 +101,15 @@ export class DropDawnSearchByCategory {
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow dd-trigger-2${this.classPrefix}`;
 
-    container.append(caption, arrow, this.dropDownList());
-    return container;
+    if (params.getAll(this.classPrefix.slice(1)).length !== 0) {
+      containerCaption.classList.add('filtered');
+      caption.innerText = String(name + '      ' + params.getAll(this.classPrefix.slice(1)).length);
+    } else {
+      containerCaption.classList.remove('filtered');
+    }
+
+    containerCaption.append(caption, arrow, this.dropDownList());
+    return containerCaption;
   }
 
   itemsInCategory = (cat: keyof IData | string, condition: string) => {

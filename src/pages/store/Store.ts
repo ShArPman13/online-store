@@ -5,6 +5,7 @@ import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearchByCategory } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
 import { params } from '../../core/utilities/queryParams';
+import { DualSlider } from '../../core/components/DualSlider';
 
 const data: IData[] = dataJSON.products;
 
@@ -19,10 +20,12 @@ export class Store extends Page {
   dropDawnSearchByCategory: DropDawnSearchByCategory;
   dropDawnSearchByBrand: DropDawnSearchByCategory;
 
+  dualSliderPrice: DualSlider;
+
   categoriesChecked: string[] = [];
   brandsChecked: string[] = [];
 
-  filterContainer = document.createElement('div');
+  searchContainer = document.createElement('div');
   cardContainer = document.createElement('div');
 
   constructor(id: string) {
@@ -34,16 +37,33 @@ export class Store extends Page {
       Store.textObject.classPrefixForCategory
     );
     this.dropDawnSearchByBrand = new DropDawnSearchByCategory(this.brandArray(), Store.textObject.classPrefixForBrand);
+
+    this.dualSliderPrice = new DualSlider();
   }
 
   render() {
-    this.filterContainer.className = 'filterContainer';
+    this.searchContainer.className = 'searchContainer';
 
-    this.filterContainer.append(
+    const divider = document.createElement('div');
+    divider.className = 'divider';
+
+    const filtersContainer = document.createElement('div');
+    filtersContainer.className = 'filterContainer';
+
+    const sliderContainer = document.createElement('div');
+    sliderContainer.className = 'sliderContainer';
+
+    filtersContainer.append(
       this.dropDawnSearchByCategory.renderDropDownListWithCaption('Category'),
       this.dropDawnSearchByBrand.renderDropDownListWithCaption('Brands')
     );
-    this.container.append(this.filterContainer, this.getItemCards());
+
+    sliderContainer.append(this.dualSliderPrice.render());
+
+    this.searchContainer.append(filtersContainer, divider, sliderContainer);
+
+    this.container.append(this.searchContainer, this.getItemCards());
+
     return this.container;
   }
 
