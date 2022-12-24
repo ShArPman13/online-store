@@ -5,9 +5,9 @@ export default class ModalWindow {
     const container = document.createElement('div');
     container.className = 'modul-window';
 
-    // const formContainer = document.createElement('form');
-    // formContainer.className = 'modul-window-form';
-
+    const background = document.createElement('div');
+    background.className = 'modul-window-background';
+    document.body.append(background);
     const info = document.createElement('div');
     info.className = 'modul-window__info';
     info.innerText = 'Personal details';
@@ -154,6 +154,7 @@ export default class ModalWindow {
     buttonClose.innerText = 'Close';
 
     buttonClose.addEventListener('click', () => {
+      background.remove();
       container.remove();
     });
 
