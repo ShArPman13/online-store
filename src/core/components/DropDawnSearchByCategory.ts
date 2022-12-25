@@ -3,8 +3,9 @@ import { IData } from '../../types/dataJSON';
 import { getFilteredItems } from '../utilities/getFilteredItems';
 import { params } from '../utilities/queryParams';
 
-export class DropDawnSearchByCategory {
+export class DropDawnSearch {
   container = document.createElement('div');
+  containerCaption = document.createElement('div');
   categories;
   data: IData[] = dataJSON.products;
   classPrefix;
@@ -79,9 +80,8 @@ export class DropDawnSearchByCategory {
     return this.container;
   }
 
-  renderDropDownListWithCaption(name: string) {
-    const container = document.createElement('div');
-    container.className = `caption-container dd-trigger-2${this.classPrefix}`;
+  renderDropDownListWithCaption(name: string, listFields?: string[]) {
+    this.containerCaption.className = `caption-container dd-trigger-2${this.classPrefix}`;
 
     document.addEventListener('click', (e: MouseEvent) => {
       const target = <HTMLDivElement>e.target;
@@ -101,8 +101,15 @@ export class DropDawnSearchByCategory {
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow dd-trigger-2${this.classPrefix}`;
 
-    container.append(caption, arrow, this.dropDownList());
-    return container;
+    if (params.getAll(this.classPrefix.slice(1)).length !== 0) {
+      this.containerCaption.classList.add('filtered');
+      caption.innerText = String(name + '    ' + params.getAll(this.classPrefix.slice(1)).length);
+    } else {
+      this.containerCaption.classList.remove('filtered');
+    }
+
+    this.containerCaption.append(caption, arrow, this.dropDownList(listFields));
+    return this.containerCaption;
   }
 
   itemsInCategory = (cat: keyof IData | string, condition: string) => {
@@ -128,5 +135,6 @@ export class DropDawnSearchByCategory {
 
   clearList() {
     this.container.innerHTML = '';
+    this.containerCaption.innerHTML = '';
   }
 }

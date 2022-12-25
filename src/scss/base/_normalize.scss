@@ -139,62 +139,62 @@ input:focus:input-placeholder {
 /* Отмена default стилей на radio button */
 
 /* Отмена default стилей на INPUT RANGE */
-input[type="range"] {
-  appearance: none;
+// input[type="range"] {
+//   appearance: none;
 
-  /* Скрывает слайдер, чтобы можно было создать свой */
-  width: 100%;
+//   /* Скрывает слайдер, чтобы можно было создать свой */
+//   width: 100%;
 
-  /* Указание параметра ширины требуется для Firefox. */
-}
+//   /* Указание параметра ширины требуется для Firefox. */
+// }
 
-input[type="range"]:focus {
-  outline: none;
-}
+// input[type="range"]:focus {
+//   outline: none;
+// }
 
-input[type="range"]::-ms-track {
-  /* Скрывает слайдер, чтобы можно было добавить собственные стили. */
-  border-color: transparent;
-  width: 100%;
-  color: transparent;
-  background: transparent;
-  cursor: pointer;
-}
+// input[type="range"]::-ms-track {
+//   /* Скрывает слайдер, чтобы можно было добавить собственные стили. */
+//   border-color: transparent;
+//   width: 100%;
+//   color: transparent;
+//   background: transparent;
+//   cursor: pointer;
+// }
 
 /* Отмена default стилей на INPUT RANGE */
 
 /* СТИЛИЗУЕМ INPUT RANGE */
 /* Специальные правила для браузеров на движках WebKit/Blink */
-input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
-  border-radius: 5px;
-  width: 115px;
-  height: 6px;
-  background: rgb(254 144 19 / 100%);
-  cursor: pointer;
+// input[type="range"]::-webkit-slider-thumb {
+//   appearance: none;
+//   border-radius: 5px;
+//   width: 115px;
+//   height: 6px;
+//   background: rgb(254 144 19 / 100%);
+//   cursor: pointer;
 
-  @media screen and (max-width: 1225px) {
-    width: 75px;
-  }
-}
+//   @media screen and (max-width: 1225px) {
+//     width: 75px;
+//   }
+// }
 
-/* Тоже самое для Firefox */
-input[type="range"]::-moz-range-thumb {
-  border-radius: 5px;
-  width: 16px;
-  height: 36px;
-  background: rgb(254 144 19 / 100%);
-  cursor: pointer;
-}
+// /* Тоже самое для Firefox */
+// input[type="range"]::-moz-range-thumb {
+//   border-radius: 5px;
+//   width: 16px;
+//   height: 36px;
+//   background: rgb(254 144 19 / 100%);
+//   cursor: pointer;
+// }
 
-/* Тоже самое для IE */
-input[type="range"]::-ms-thumb {
-  border-radius: 5px;
-  width: 16px;
-  height: 36px;
-  background: rgb(254 144 19 / 100%);
-  cursor: pointer;
-}
+// /* Тоже самое для IE */
+// input[type="range"]::-ms-thumb {
+//   border-radius: 5px;
+//   width: 16px;
+//   height: 36px;
+//   background: rgb(254 144 19 / 100%);
+//   cursor: pointer;
+// }
 
 /* СТИЛИЗУЕМ INPUT RANGE */
 
