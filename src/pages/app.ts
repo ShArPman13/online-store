@@ -42,6 +42,7 @@ export class App {
     if (page) {
       if (page instanceof Store) {
         page.applyAllFilters();
+        page.getItemsToRenderAfterFiltres();
       }
       this.previosPage = window.location.hash.slice(1);
 
@@ -65,8 +66,10 @@ export class App {
         this.renderNewPage(hash);
       } else {
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
+          console.log('===');
         } else {
-          this.renderNewPage('/store');
+          console.log('!==');
+          this.renderNewPage(`/store`);
         }
       }
     };
