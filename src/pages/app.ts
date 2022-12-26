@@ -17,6 +17,8 @@ export class App {
   private initialPage: HomePage;
   private header: Header;
 
+  previosPage = '';
+
   renderNewPage(idPageSource: string) {
     const idPage = idPageSource.toLowerCase();
     document.body.innerHTML = '';
@@ -41,6 +43,8 @@ export class App {
       if (page instanceof Store) {
         page.applyAllFilters();
       }
+      this.previosPage = window.location.hash.slice(1);
+
       const pageHtml = page.render();
       const containerMain: HTMLElement = document.createElement('main');
       containerMain.id = 'root';
@@ -57,11 +61,13 @@ export class App {
       if (!hash) {
         window.location.hash = `/home-page`;
       }
-
       if (!hash.includes('?')) {
         this.renderNewPage(hash);
       } else {
-        this.renderNewPage(String(PageIds.StorePage));
+        if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
+        } else {
+          this.renderNewPage('/store');
+        }
       }
     };
 
@@ -75,7 +81,6 @@ export class App {
   }
 
   run() {
-    this.renderNewPage('Home-Page');
     this.enableRouteChange();
     SelectProduct.chooseProduct();
     SelectProduct.addAndRemoveInBasket();

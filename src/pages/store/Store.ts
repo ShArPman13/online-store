@@ -2,9 +2,13 @@ import { Page } from '../../core/templates/page';
 import dataJSON from '../../assets/data/data.json';
 import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
-import { DropDawnSearchByCategory } from '../../core/components/DropDawnSearchByCategory';
+import { DropDawnSearch } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
 import { params } from '../../core/utilities/queryParams';
+import Slider from '../../core/components/DualSlider';
+import { getMinMax } from '../../core/utilities/getMinMax';
+import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
+import { getFilteredStockItems } from '../../core/utilities/getFilteredStockItems';
 
 const data: IData[] = dataJSON.products;
 
@@ -16,34 +20,66 @@ export class Store extends Page {
     classPrefixForBrand: '_brand',
   };
 
-  dropDawnSearchByCategory: DropDawnSearchByCategory;
-  dropDawnSearchByBrand: DropDawnSearchByCategory;
+  dropDawnSearchByCategory: DropDawnSearch;
+  dropDawnSearchByBrand: DropDawnSearch;
+
+  dualSliderPrice: Slider;
+  dualSliderStock: Slider;
+
+  priceMin = Number(params.getAll('price').join('|').split('|')[0]);
+  priceMax = Number(params.getAll('price').join('|').split('|')[1]);
+  stockMin = Number(params.getAll('stock').join('|').split('|')[0]);
+  stockMax = Number(params.getAll('stock').join('|').split('|')[1]);
+
+  sliderPrice = document.createElement('div');
+  sliderStock = document.createElement('div');
+
+  searchContainer = document.createElement('div');
+  cardContainer = document.createElement('div');
 
   categoriesChecked: string[] = [];
   brandsChecked: string[] = [];
-
-  filterContainer = document.createElement('div');
-  cardContainer = document.createElement('div');
 
   constructor(id: string) {
     super(id);
     this.container.className = 'main-container';
 
-    this.dropDawnSearchByCategory = new DropDawnSearchByCategory(
-      this.categoryArray(),
-      Store.textObject.classPrefixForCategory
-    );
-    this.dropDawnSearchByBrand = new DropDawnSearchByCategory(this.brandArray(), Store.textObject.classPrefixForBrand);
+    this.dropDawnSearchByCategory = new DropDawnSearch(this.categoryArray(), Store.textObject.classPrefixForCategory);
+    this.dropDawnSearchByBrand = new DropDawnSearch(this.brandArray(), Store.textObject.classPrefixForBrand);
+
+    this.dualSliderPrice = new Slider(this.sliderPrice);
+    this.dualSliderStock = new Slider(this.sliderStock);
   }
 
   render() {
-    this.filterContainer.className = 'filterContainer';
+    this.searchContainer.className = 'searchContainer';
 
-    this.filterContainer.append(
+    const divider = document.createElement('div');
+    divider.className = 'divider';
+
+    const filtersContainer = document.createElement('div');
+    filtersContainer.className = 'filterContainer';
+
+    const sliderContainer = document.createElement('div');
+    sliderContainer.className = 'sliderContainer';
+
+    filtersContainer.append(
       this.dropDawnSearchByCategory.renderDropDownListWithCaption('Category'),
       this.dropDawnSearchByBrand.renderDropDownListWithCaption('Brands')
     );
-    this.container.append(this.filterContainer, this.getItemCards());
+
+    this.dualSliderPrice.createSlider(getMinMax(data, 'price'), 'price');
+    this.dualSliderStock.createSlider(getMinMax(data, 'stock'), 'stock');
+
+    this.dualSliderPrice.updateValues(this.priceMin, this.priceMax);
+    this.dualSliderStock.updateValues(this.stockMin, this.stockMax);
+
+    sliderContainer.append(this.sliderPrice, this.sliderStock);
+
+    this.searchContainer.append(filtersContainer, divider, sliderContainer);
+
+    this.container.append(this.searchContainer, this.getItemCards());
+
     return this.container;
   }
 
@@ -109,32 +145,37 @@ export class Store extends Page {
     }
   }
 
-  getItemsToRenderAfterFiltres() {
-    if (this.categoriesChecked.length === 0 && this.brandsChecked.length === 0) {
-      this.filter(data);
-    } else {
-      const arrayCategoryAndBrand = [this.categoriesChecked, this.brandsChecked];
-      const resData = getFilteredItems(arrayCategoryAndBrand, data);
-      this.filter(resData);
-    }
+  getItemsToRenderAfterFiltres(priceMin: number, priceMax: number, stockMin: number, stockMax: number) {
+    const arrayCategoryAndBrand = [this.categoriesChecked, this.brandsChecked];
+
+    const dataAfterBrandCategoryFilter = getFilteredItems(arrayCategoryAndBrand, data);
+    const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrandCategoryFilter, priceMin, priceMax);
+    const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, stockMin, stockMax);
+
+    this.filter(dataAfterStockFilter);
   }
 
   applyAllFilters() {
     const actualise = () => {
+      // console.log('actul', params.toString());
       this.categoriesChecked = params.getAll('category');
       this.brandsChecked = params.getAll('brand');
 
       const brands = this.brandArrayActualByCategory(this.categoriesChecked);
       this.dropDawnSearchByBrand.clearList();
-      this.dropDawnSearchByBrand.dropDownList(brands);
+      this.dropDawnSearchByBrand.renderDropDownListWithCaption('Brands', brands);
 
       const category = this.categoryArrayActualByBrand(this.brandsChecked);
       this.dropDawnSearchByCategory.clearList();
-      this.dropDawnSearchByCategory.dropDownList(category);
+      this.dropDawnSearchByCategory.renderDropDownListWithCaption('Category', category);
 
-      this.getItemsToRenderAfterFiltres();
+      this.priceMin = Number(params.getAll('price').join('|').split('|')[0]);
+      this.priceMax = Number(params.getAll('price').join('|').split('|')[1]);
+      this.stockMin = Number(params.getAll('stock').join('|').split('|')[0]);
+      this.stockMax = Number(params.getAll('stock').join('|').split('|')[1]);
+
+      this.getItemsToRenderAfterFiltres(this.priceMin, this.priceMax, this.stockMin, this.stockMax);
     };
-    actualise();
     window.addEventListener('hashchange', actualise);
   }
 }
