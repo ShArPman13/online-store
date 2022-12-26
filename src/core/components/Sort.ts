@@ -17,7 +17,7 @@ export class Sort {
 
     const titleList = document.createElement('span');
     titleList.className = `caption-container__text dd-trigger-2 sorting`;
-    titleList.innerText = getQuery().sort.join();
+    titleList.innerText = `${getQuery().sort.join()}   ⬍` || 'priceAS   ⬍';
 
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow dd-trigger-2`;
@@ -27,7 +27,7 @@ export class Sort {
       if (target.classList.contains(`dd-trigger-2`)) {
         arrow.classList.add('open');
         this.containerList.classList.add('open');
-      } else if (!target.classList.contains('dd-trigger')) {
+      } else if (!target.classList.contains('dd-trigger') || target.classList.contains('li-container')) {
         arrow.classList.remove('open');
         this.containerList.classList.remove('open');
       }
@@ -43,7 +43,8 @@ export class Sort {
       elementOfList.addEventListener('click', () => {
         params.delete('sort');
         params.append('sort', key);
-        titleList.innerText = key;
+        titleList.innerText = `${key}   ⬍`;
+        this.containerCaption.classList.add('filtered');
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       });
       list.append(elementOfList);

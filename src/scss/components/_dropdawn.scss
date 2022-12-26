@@ -16,7 +16,7 @@
   cursor: pointer;
 
   &:hover {
-    border: 1px solid rgb(54 54 54);
+    border: 1px solid rgb(0 0 0);
   }
 
   &.sorting {
@@ -26,8 +26,13 @@
   }
 
   &.filtered {
+    border: 1px solid transparent;
     color: rgb(255 255 255);
     background-color: rgb(0 0 0);
+
+    &:hover {
+      border: 1px solid transparent;
+    }
   }
 }
 
@@ -48,6 +53,10 @@
 
   &.open {
     background-image: url("../assets/img/arrow_up.png");
+  }
+
+  &.filtered {
+    background-image: url("../assets/img/cross.png");
   }
 }
 

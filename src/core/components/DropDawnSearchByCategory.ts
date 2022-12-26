@@ -45,10 +45,21 @@ export class DropDawnSearch {
 
     if (getQuery()[this.classPrefix].length !== 0) {
       this.containerCaption.classList.add('filtered');
+      arrow.classList.add('filtered');
       titleList.innerText = String(name + '    ' + getQuery()[this.classPrefix].length);
     } else {
       this.containerCaption.classList.remove('filtered');
+      arrow.classList.remove('filtered');
     }
+
+    arrow.addEventListener('click', () => {
+      if (arrow.classList.contains('filtered')) {
+        this.clearList();
+        params.delete(this.classPrefix);
+        this.render(this.classPrefix);
+        window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
+      }
+    });
 
     this.checkboxes.length = 0;
     if (!listFields || listFields.length === 0) {
