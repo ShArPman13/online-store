@@ -9,6 +9,8 @@ import Slider from '../../core/components/DualSlider';
 import { getMinMax } from '../../core/utilities/getMinMax';
 import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
 import { getFilteredStockItems } from '../../core/utilities/getFilteredStockItems';
+import { Sort } from '../../core/components/Sort';
+import { sorting } from '../../core/utilities/sorting';
 
 const data: IData[] = dataJSON.products;
 
@@ -23,6 +25,8 @@ export class Store extends Page {
 
   dualSliderPrice: Slider;
   dualSliderStock: Slider;
+
+  sortList: Sort;
 
   sliderPrice = document.createElement('div');
   sliderStock = document.createElement('div');
@@ -42,6 +46,8 @@ export class Store extends Page {
 
     this.dualSliderPrice = new Slider(this.sliderPrice);
     this.dualSliderStock = new Slider(this.sliderStock);
+
+    this.sortList = new Sort();
   }
 
   render() {
@@ -61,14 +67,15 @@ export class Store extends Page {
 
     filtersContainer.append(
       this.dropDawnSearchByCategory.render('Category', category),
-      this.dropDawnSearchByBrand.render('Brands', brands)
+      this.dropDawnSearchByBrand.render('Brands', brands),
+      this.sortList.render()
     );
 
     this.dualSliderPrice.createSlider(getMinMax(data, 'price'), 'price');
     this.dualSliderStock.createSlider(getMinMax(data, 'stock'), 'stock');
 
-    this.dualSliderPrice.updateValues(getQuery().priceMIN, getQuery().priceMAX);
-    this.dualSliderStock.updateValues(getQuery().stockMIN, getQuery().stockMAX);
+    // this.dualSliderPrice.updateValues(getQuery().priceMIN, getQuery().priceMAX);
+    // this.dualSliderStock.updateValues(getQuery().stockMIN, getQuery().stockMAX);
 
     sliderContainer.append(this.sliderPrice, this.sliderStock);
 
@@ -139,16 +146,16 @@ export class Store extends Page {
         this.cardContainer.append(card.render());
       });
     }
-    // this.dualSliderPrice.updateValues(getMinMax(items, 'price')[0], getMinMax(items, 'price')[1]);
-    // this.dualSliderStock.updateValues(getMinMax(items, 'stock')[0], getMinMax(items, 'stock')[1]);
+    this.dualSliderPrice.updateValues(getMinMax(items, 'price')[0], getMinMax(items, 'price')[1]);
+    this.dualSliderStock.updateValues(getMinMax(items, 'stock')[0], getMinMax(items, 'stock')[1]);
   }
 
   getItemsToRenderAfterFiltres() {
     const dataAfterBrCatFilter = getFilteredItems([getQuery().category, getQuery().brand], data);
     const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrCatFilter, getQuery().priceMIN, getQuery().priceMAX);
     const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, getQuery().stockMIN, getQuery().stockMAX);
-
-    this.filter(dataAfterStockFilter);
+    const sortData = sorting(dataAfterStockFilter);
+    this.filter(sortData);
   }
 
   applyAllFilters() {

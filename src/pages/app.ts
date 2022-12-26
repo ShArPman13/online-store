@@ -66,9 +66,7 @@ export class App {
         this.renderNewPage(hash);
       } else {
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
-          console.log('===');
         } else {
-          console.log('!==');
           this.renderNewPage(`/store`);
         }
       }
