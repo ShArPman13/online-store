@@ -5,6 +5,6 @@ export function getFilteredStockItems(data: IData[], stockMin: number, stockMax:
     return data;
   }
   return data.filter((item) => {
-    return item.stock > stockMin && item.stock < stockMax;
+    return item.stock >= stockMin && item.stock <= stockMax;
   });
 }

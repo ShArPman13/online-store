@@ -9,6 +9,7 @@ import dataJSON from '../assets/data/data.json';
 import { IData } from '../types/dataJSON';
 import { Product } from './product/Product';
 import SelectProduct from './product/Select';
+import { params } from '../core/utilities/queryParams';
 
 const data: IData[] = dataJSON.products;
 
@@ -42,6 +43,7 @@ export class App {
     if (page) {
       if (page instanceof Store) {
         page.applyAllFilters();
+        page.getItemsToRenderAfterFiltres();
       }
       this.previosPage = window.location.hash.slice(1);
 
@@ -62,11 +64,12 @@ export class App {
         window.location.hash = `/home-page`;
       }
       if (!hash.includes('?')) {
+        window.location.hash = params.toString() ? `${hash}?${params.toString()}` : `${hash}`;
         this.renderNewPage(hash);
       } else {
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
         } else {
-          this.renderNewPage('/store');
+          this.renderNewPage(`/store`);
         }
       }
     };

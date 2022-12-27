@@ -4,11 +4,15 @@ import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearch } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
-import { params } from '../../core/utilities/queryParams';
+import { getQuery, params } from '../../core/utilities/queryParams';
 import Slider from '../../core/components/DualSlider';
 import { getMinMax } from '../../core/utilities/getMinMax';
 import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
 import { getFilteredStockItems } from '../../core/utilities/getFilteredStockItems';
+import { Sort } from '../../core/components/Sort';
+import { sorting } from '../../core/utilities/sorting';
+import { Search } from '../../core/components/Search';
+import { searching } from '../../core/utilities/searching';
 
 const data: IData[] = dataJSON.products;
 
@@ -16,8 +20,6 @@ export class Store extends Page {
   static textObject = {
     mainTitle: 'Store Page for Online-Store!',
     noResultText: 'There are no products according the request',
-    classPrefixForCategory: '_category',
-    classPrefixForBrand: '_brand',
   };
 
   dropDawnSearchByCategory: DropDawnSearch;
@@ -26,10 +28,8 @@ export class Store extends Page {
   dualSliderPrice: Slider;
   dualSliderStock: Slider;
 
-  priceMin = Number(params.getAll('price').join('|').split('|')[0]);
-  priceMax = Number(params.getAll('price').join('|').split('|')[1]);
-  stockMin = Number(params.getAll('stock').join('|').split('|')[0]);
-  stockMax = Number(params.getAll('stock').join('|').split('|')[1]);
+  sortList: Sort;
+  search: Search;
 
   sliderPrice = document.createElement('div');
   sliderStock = document.createElement('div');
@@ -44,11 +44,14 @@ export class Store extends Page {
     super(id);
     this.container.className = 'main-container';
 
-    this.dropDawnSearchByCategory = new DropDawnSearch(this.categoryArray(), Store.textObject.classPrefixForCategory);
-    this.dropDawnSearchByBrand = new DropDawnSearch(this.brandArray(), Store.textObject.classPrefixForBrand);
+    this.dropDawnSearchByCategory = new DropDawnSearch(this.categoryArray(), 'category');
+    this.dropDawnSearchByBrand = new DropDawnSearch(this.brandArray(), 'brand');
 
     this.dualSliderPrice = new Slider(this.sliderPrice);
     this.dualSliderStock = new Slider(this.sliderStock);
+
+    this.sortList = new Sort();
+    this.search = new Search();
   }
 
   render() {
@@ -63,16 +66,21 @@ export class Store extends Page {
     const sliderContainer = document.createElement('div');
     sliderContainer.className = 'sliderContainer';
 
+    const brands = this.brandArrayActualByCategory(getQuery().category);
+    const category = this.categoryArrayActualByBrand(getQuery().brand);
+
     filtersContainer.append(
-      this.dropDawnSearchByCategory.renderDropDownListWithCaption('Category'),
-      this.dropDawnSearchByBrand.renderDropDownListWithCaption('Brands')
+      this.dropDawnSearchByCategory.render('Category', category),
+      this.dropDawnSearchByBrand.render('Brands', brands),
+      this.search.render(),
+      this.sortList.render()
     );
 
     this.dualSliderPrice.createSlider(getMinMax(data, 'price'), 'price');
     this.dualSliderStock.createSlider(getMinMax(data, 'stock'), 'stock');
 
-    this.dualSliderPrice.updateValues(this.priceMin, this.priceMax);
-    this.dualSliderStock.updateValues(this.stockMin, this.stockMax);
+    // this.dualSliderPrice.updateValues(getQuery().priceMIN, getQuery().priceMAX);
+    // this.dualSliderStock.updateValues(getQuery().stockMIN, getQuery().stockMAX);
 
     sliderContainer.append(this.sliderPrice, this.sliderStock);
 
@@ -86,7 +94,7 @@ export class Store extends Page {
   getItemCards = () => {
     this.cardContainer.className = 'container-cards';
     if (params.toString()) {
-      this.applyAllFilters();
+      this.getItemsToRenderAfterFiltres();
     } else {
       data.forEach((item) => {
         const card = new goodCardSmall(item);
@@ -143,38 +151,34 @@ export class Store extends Page {
         this.cardContainer.append(card.render());
       });
     }
+    this.dualSliderPrice.updateValues(getMinMax(items, 'price')[0], getMinMax(items, 'price')[1]);
+    this.dualSliderStock.updateValues(getMinMax(items, 'stock')[0], getMinMax(items, 'stock')[1]);
   }
 
-  getItemsToRenderAfterFiltres(priceMin: number, priceMax: number, stockMin: number, stockMax: number) {
-    const arrayCategoryAndBrand = [this.categoriesChecked, this.brandsChecked];
-
-    const dataAfterBrandCategoryFilter = getFilteredItems(arrayCategoryAndBrand, data);
-    const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrandCategoryFilter, priceMin, priceMax);
-    const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, stockMin, stockMax);
-
-    this.filter(dataAfterStockFilter);
+  getItemsToRenderAfterFiltres() {
+    const dataAfterBrCatFilter = getFilteredItems([getQuery().category, getQuery().brand], data);
+    const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrCatFilter, getQuery().priceMIN, getQuery().priceMAX);
+    const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, getQuery().stockMIN, getQuery().stockMAX);
+    const sortData = sorting(dataAfterStockFilter);
+    const searchData = searching(sortData);
+    this.filter(searchData);
   }
 
   applyAllFilters() {
     const actualise = () => {
-      // console.log('actul', params.toString());
-      this.categoriesChecked = params.getAll('category');
-      this.brandsChecked = params.getAll('brand');
-
-      const brands = this.brandArrayActualByCategory(this.categoriesChecked);
+      getQuery();
+      console.log('163', params.toString());
+      console.log('164', getQuery());
+      const brands = this.brandArrayActualByCategory(getQuery().category);
+      console.log('brands', brands);
       this.dropDawnSearchByBrand.clearList();
-      this.dropDawnSearchByBrand.renderDropDownListWithCaption('Brands', brands);
-
-      const category = this.categoryArrayActualByBrand(this.brandsChecked);
+      this.dropDawnSearchByBrand.render('Brands', brands);
+      const category = this.categoryArrayActualByBrand(getQuery().brand);
+      console.log('categories', category);
       this.dropDawnSearchByCategory.clearList();
-      this.dropDawnSearchByCategory.renderDropDownListWithCaption('Category', category);
+      this.dropDawnSearchByCategory.render('Category', category);
 
-      this.priceMin = Number(params.getAll('price').join('|').split('|')[0]);
-      this.priceMax = Number(params.getAll('price').join('|').split('|')[1]);
-      this.stockMin = Number(params.getAll('stock').join('|').split('|')[0]);
-      this.stockMax = Number(params.getAll('stock').join('|').split('|')[1]);
-
-      this.getItemsToRenderAfterFiltres(this.priceMin, this.priceMax, this.stockMin, this.stockMax);
+      this.getItemsToRenderAfterFiltres();
     };
     window.addEventListener('hashchange', actualise);
   }
