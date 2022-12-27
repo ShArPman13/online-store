@@ -12,6 +12,7 @@ export function getQuery() {
   const sort = params.getAll('sort');
   const search = params.getAll('search');
   const searchBy = params.getAll('searchby');
+  const view = params.getAll('view');
 
   return {
     category: category,
@@ -23,6 +24,7 @@ export function getQuery() {
     sort: sort,
     search: search,
     searchBy: searchBy,
+    view: view,
   };
 }
 
@@ -34,6 +36,7 @@ export function delAllQuery() {
   params.delete('sort');
   params.delete('search');
   params.delete('searchby');
+  params.delete('view');
 }
 
 export function copyQuery() {

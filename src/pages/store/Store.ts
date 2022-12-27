@@ -4,7 +4,7 @@ import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearch } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
-import { copyQuery, delAllQuery, getQuery, params } from '../../core/utilities/queryParams';
+import { delAllQuery, getQuery, params } from '../../core/utilities/queryParams';
 import Slider from '../../core/components/DualSlider';
 import { getMinMax } from '../../core/utilities/getMinMax';
 import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
@@ -79,9 +79,24 @@ export class Store extends Page {
       }, 1000);
     });
 
-    const contanerBTN = document.createElement('div');
-    contanerBTN.className = 'containerBTN';
-    contanerBTN.append(copyBTN, clearBTN);
+    const viewBTN = document.createElement('button');
+    viewBTN.className = 'clear-btn';
+    viewBTN.innerText = 'VIEW';
+    viewBTN.addEventListener('click', () => {
+      if (getQuery().view.join() === 'view') {
+        params.delete('view');
+        this.cardContainer.classList.remove('view');
+      } else {
+        params.append('view', 'view');
+        this.cardContainer.classList.add('view');
+      }
+
+      window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
+    });
+
+    const containerBTN = document.createElement('div');
+    containerBTN.className = 'containerBTN';
+    containerBTN.append(viewBTN, copyBTN, clearBTN);
 
     const filtersContainer = document.createElement('div');
     filtersContainer.className = 'filterContainer';
@@ -101,7 +116,7 @@ export class Store extends Page {
       this.search.render()
     );
 
-    sortContainer.append(this.sortList.render(), contanerBTN);
+    sortContainer.append(this.sortList.render(), containerBTN);
 
     this.dualSliderPrice.createSlider(getMinMax(data, 'price'), 'price');
     this.dualSliderStock.createSlider(getMinMax(data, 'stock'), 'stock');

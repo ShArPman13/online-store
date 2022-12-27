@@ -21,6 +21,11 @@
     color: rgb(0 0 0);
   }
 
+  &.view {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 15px;
+  }
+
   &.no-result {
     display: flex;
     align-items: center;

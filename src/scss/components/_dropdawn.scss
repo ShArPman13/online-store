@@ -23,7 +23,6 @@
     justify-content: center;
     margin-left: auto;
     width: 34%;
-    background-color: rgb(217 217 217);
     gap: 20px;
   }
 
@@ -118,12 +117,6 @@
   width: 100%;
   color: #444;
   gap: 5px;
-
-  .drop-down__input {
-    // &:hover {
-    //   cursor: pointer;
-    // }
-  }
 
   .drop-down__input-label {
     &:hover {
