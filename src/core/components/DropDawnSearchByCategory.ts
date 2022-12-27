@@ -54,7 +54,7 @@ export class DropDawnSearch {
 
     arrow.addEventListener('click', () => {
       if (arrow.classList.contains('filtered')) {
-        this.clearList();
+        // this.clearList();
         params.delete(this.classPrefix);
         this.render(this.classPrefix);
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
