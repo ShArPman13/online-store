@@ -88,9 +88,10 @@ export class Store extends Page {
         this.cardContainer.classList.remove('view');
       } else {
         params.append('view', 'view');
-        this.cardContainer.classList.add('view');
+        setTimeout(() => {
+          this.cardContainer.classList.add('view');
+        }, 50);
       }
-
       window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
     });
 
