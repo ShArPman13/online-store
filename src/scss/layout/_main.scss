@@ -30,8 +30,13 @@
 }
 
 .searchContainer {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
+  padding: 10px 0;
+  background-color: rgb(255 255 255 / 97%);
   gap: 20px;
 
   .divider {
@@ -40,16 +45,62 @@
     background-color: rgb(231 231 231);
   }
 
-  .filterContainer {
-    display: flex;
-    gap: 30px;
-  }
-
   .sliderContainer {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
     border-radius: 3px;
     padding: 10px;
+  }
+}
+
+.filterContainer {
+  display: flex;
+  gap: 30px;
+
+  .search-container {
+    margin-left: auto;
+    width: 38%;
+
+    .caption-container {
+      width: 30%;
+    }
+  }
+}
+
+.sortContainer {
+  display: flex;
+  gap: 30px;
+
+  .caption-container {
+    margin-left: 0;
+    width: 37%;
+  }
+
+  .containerBTN {
+    display: flex;
+    margin-left: auto;
+    gap: 5px;
+
+    .clear-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      border: 1px solid rgb(1 1 1);
+      border-radius: 3px;
+      padding: 5px;
+      width: 60px;
+      height: 100%;
+      background-color: transparent;
+      transition: 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        color: rgb(255 255 255);
+        background-color: rgb(0 0 0);
+        transition: 0.2s;
+      }
+    }
   }
 }

@@ -25,3 +25,18 @@ export function getQuery() {
     searchBy: searchBy,
   };
 }
+
+export function delAllQuery() {
+  params.delete('category');
+  params.delete('brand');
+  params.delete('price');
+  params.delete('stock');
+  params.delete('sort');
+  params.delete('search');
+  params.delete('searchby');
+}
+
+export function copyQuery() {
+  const query = params.toString();
+  return query;
+}

@@ -4,7 +4,7 @@ import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearch } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
-import { getQuery, params } from '../../core/utilities/queryParams';
+import { copyQuery, delAllQuery, getQuery, params } from '../../core/utilities/queryParams';
 import Slider from '../../core/components/DualSlider';
 import { getMinMax } from '../../core/utilities/getMinMax';
 import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
@@ -60,8 +60,34 @@ export class Store extends Page {
     const divider = document.createElement('div');
     divider.className = 'divider';
 
+    const clearBTN = document.createElement('button');
+    clearBTN.className = 'clear-btn';
+    clearBTN.innerText = 'CLEAR';
+    clearBTN.addEventListener('click', () => {
+      delAllQuery();
+      window.location.hash = `/store`;
+    });
+
+    const copyBTN = document.createElement('button');
+    copyBTN.className = 'clear-btn';
+    copyBTN.innerText = 'COPY';
+    copyBTN.addEventListener('click', () => {
+      navigator.clipboard.writeText(document.location.href);
+      copyBTN.innerText = 'DONE';
+      setTimeout(() => {
+        copyBTN.innerText = 'COPY';
+      }, 1000);
+    });
+
+    const contanerBTN = document.createElement('div');
+    contanerBTN.className = 'containerBTN';
+    contanerBTN.append(copyBTN, clearBTN);
+
     const filtersContainer = document.createElement('div');
     filtersContainer.className = 'filterContainer';
+
+    const sortContainer = document.createElement('div');
+    sortContainer.className = 'sortContainer';
 
     const sliderContainer = document.createElement('div');
     sliderContainer.className = 'sliderContainer';
@@ -72,9 +98,10 @@ export class Store extends Page {
     filtersContainer.append(
       this.dropDawnSearchByCategory.render('Category', category),
       this.dropDawnSearchByBrand.render('Brands', brands),
-      this.search.render(),
-      this.sortList.render()
+      this.search.render()
     );
+
+    sortContainer.append(this.sortList.render(), contanerBTN);
 
     this.dualSliderPrice.createSlider(getMinMax(data, 'price'), 'price');
     this.dualSliderStock.createSlider(getMinMax(data, 'stock'), 'stock');
@@ -84,7 +111,7 @@ export class Store extends Page {
 
     sliderContainer.append(this.sliderPrice, this.sliderStock);
 
-    this.searchContainer.append(filtersContainer, divider, sliderContainer);
+    this.searchContainer.append(filtersContainer, sortContainer, divider, sliderContainer);
 
     this.container.append(this.searchContainer, this.getItemCards());
 
@@ -167,14 +194,10 @@ export class Store extends Page {
   applyAllFilters() {
     const actualise = () => {
       getQuery();
-      console.log('163', params.toString());
-      console.log('164', getQuery());
       const brands = this.brandArrayActualByCategory(getQuery().category);
-      console.log('brands', brands);
       this.dropDawnSearchByBrand.clearList();
       this.dropDawnSearchByBrand.render('Brands', brands);
       const category = this.categoryArrayActualByBrand(getQuery().brand);
-      console.log('categories', category);
       this.dropDawnSearchByCategory.clearList();
       this.dropDawnSearchByCategory.render('Category', category);
 
