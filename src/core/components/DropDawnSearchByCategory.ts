@@ -68,7 +68,6 @@ export class DropDawnSearch {
 
     const list = document.createElement('ul');
     list.className = 'drop-down__select dd-trigger';
-    // console.log(listFields);
     listFields.forEach((field) => {
       const elementOfList = document.createElement('li');
       elementOfList.className = 'li-container dd-trigger';

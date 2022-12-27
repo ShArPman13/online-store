@@ -18,7 +18,7 @@ export class Sort {
     const titleList = document.createElement('span');
     titleList.className = `caption-container__text dd-trigger-2 sorting`;
 
-    titleList.innerText = getQuery().sort.length !== 0 ? `⬍    ${getQuery().sort.join()}` : 'priceAS   ⬍';
+    titleList.innerText = getQuery().sort.length !== 0 ? `${getQuery().sort.join()}` : 'Sorting By';
 
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow dd-trigger-2`;
@@ -37,14 +37,31 @@ export class Sort {
     const list = document.createElement('ul');
     list.className = 'drop-down__select dd-trigger sorting';
 
+    const radio: HTMLInputElement[] = [];
+
     for (const key in this.text) {
       const elementOfList = document.createElement('li');
       elementOfList.className = 'li-container dd-trigger sorting';
-      elementOfList.innerText = key;
+
+      const inputRadio = document.createElement('input');
+      inputRadio.className = 'custom-radio';
+      inputRadio.type = 'radio';
+      inputRadio.id = key;
+
+      const label = document.createElement('label');
+      label.className = 'drop-down__input-label';
+      label.setAttribute('for', elementOfList.id);
+      label.innerText = key;
+
+      elementOfList.append(inputRadio, label);
+      radio.push(inputRadio);
+
       elementOfList.addEventListener('click', () => {
+        radio.forEach((item) => (item.checked = false));
+        (<HTMLInputElement>elementOfList.firstChild).checked = true;
         params.delete('sort');
         params.append('sort', key);
-        titleList.innerText = `⬍    ${key}`;
+        titleList.innerText = key;
         this.containerCaption.classList.add('filtered');
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       });

@@ -13,16 +13,17 @@
   font-weight: 100;
   font-size: 16px;
   color: #444;
-  cursor: pointer;
 
   &:hover {
     border: 1px solid rgb(0 0 0);
+    cursor: pointer;
   }
 
   &.sorting {
+    justify-content: center;
     margin-left: auto;
-    width: 13%;
-    background-color: rgb(217 217 217);
+    width: 34%;
+    gap: 20px;
   }
 
   &.filtered {
@@ -75,12 +76,16 @@
   box-shadow: 0 5px 19px -3px rgb(0 0 0 / 37%);
   background-color: rgb(255 255 255);
 
+  &:hover {
+    cursor: auto;
+  }
+
   &.open {
     z-index: 2;
     display: flex;
 
     &.sorting {
-      width: 100%;
+      width: 95%;
       height: 150px;
     }
   }
@@ -113,12 +118,20 @@
   color: #444;
   gap: 5px;
 
+  .drop-down__input-label {
+    &:hover {
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  }
+
   &.sorting {
     height: 30px;
     font-size: 1.3rem;
 
     &:hover {
-      background-color: rgb(237 237 237);
+      opacity: 0.7;
+      cursor: pointer;
     }
   }
 }

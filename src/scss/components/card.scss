@@ -28,6 +28,20 @@
       }
     }
   }
+
+  &.view {
+    width: 100px;
+    height: 220px;
+
+    .bottom-container__basketImg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .text-container__title {
+      display: none;
+    }
+  }
 }
 
 .card__image-container {

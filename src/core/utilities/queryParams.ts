@@ -12,6 +12,7 @@ export function getQuery() {
   const sort = params.getAll('sort');
   const search = params.getAll('search');
   const searchBy = params.getAll('searchby');
+  const view = params.getAll('view');
 
   return {
     category: category,
@@ -23,5 +24,22 @@ export function getQuery() {
     sort: sort,
     search: search,
     searchBy: searchBy,
+    view: view,
   };
+}
+
+export function delAllQuery() {
+  params.delete('category');
+  params.delete('brand');
+  params.delete('price');
+  params.delete('stock');
+  params.delete('sort');
+  params.delete('search');
+  params.delete('searchby');
+  params.delete('view');
+}
+
+export function copyQuery() {
+  const query = params.toString();
+  return query;
 }
