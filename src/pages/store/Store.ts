@@ -135,7 +135,7 @@ export class Store extends Page {
   }
 
   getItemCards = () => {
-    this.cardContainer.className = 'container-cards';
+    this.cardContainer.className = getQuery().view.join() === 'view' ? 'container-cards view' : 'container-cards';
     if (params.toString()) {
       this.getItemsToRenderAfterFiltres();
     } else {
