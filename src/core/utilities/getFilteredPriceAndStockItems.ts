@@ -5,6 +5,6 @@ export function getFilteredPriceItems(data: IData[], priceMin: number, priceMax:
     return data;
   }
   return data.filter((item) => {
-    return item.price > priceMin && item.price < priceMax;
+    return item.price >= priceMin && item.price <= priceMax;
   });
 }
