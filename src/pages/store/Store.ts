@@ -11,6 +11,8 @@ import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndS
 import { getFilteredStockItems } from '../../core/utilities/getFilteredStockItems';
 import { Sort } from '../../core/components/Sort';
 import { sorting } from '../../core/utilities/sorting';
+import { Search } from '../../core/components/Search';
+import { searching } from '../../core/utilities/searching';
 
 const data: IData[] = dataJSON.products;
 
@@ -27,6 +29,7 @@ export class Store extends Page {
   dualSliderStock: Slider;
 
   sortList: Sort;
+  search: Search;
 
   sliderPrice = document.createElement('div');
   sliderStock = document.createElement('div');
@@ -48,6 +51,7 @@ export class Store extends Page {
     this.dualSliderStock = new Slider(this.sliderStock);
 
     this.sortList = new Sort();
+    this.search = new Search();
   }
 
   render() {
@@ -68,6 +72,7 @@ export class Store extends Page {
     filtersContainer.append(
       this.dropDawnSearchByCategory.render('Category', category),
       this.dropDawnSearchByBrand.render('Brands', brands),
+      this.search.render(),
       this.sortList.render()
     );
 
@@ -155,7 +160,8 @@ export class Store extends Page {
     const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrCatFilter, getQuery().priceMIN, getQuery().priceMAX);
     const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, getQuery().stockMIN, getQuery().stockMAX);
     const sortData = sorting(dataAfterStockFilter);
-    this.filter(sortData);
+    const searchData = searching(sortData);
+    this.filter(searchData);
   }
 
   applyAllFilters() {
@@ -164,9 +170,11 @@ export class Store extends Page {
       console.log('163', params.toString());
       console.log('164', getQuery());
       const brands = this.brandArrayActualByCategory(getQuery().category);
+      console.log('brands', brands);
       this.dropDawnSearchByBrand.clearList();
       this.dropDawnSearchByBrand.render('Brands', brands);
       const category = this.categoryArrayActualByBrand(getQuery().brand);
+      console.log('categories', category);
       this.dropDawnSearchByCategory.clearList();
       this.dropDawnSearchByCategory.render('Category', category);
 

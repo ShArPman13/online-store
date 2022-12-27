@@ -10,6 +10,8 @@ export function getQuery() {
   const stockMIN = Number(params.getAll('stock').join('|').split('|')[0]);
   const stockMAX = Number(params.getAll('stock').join('|').split('|')[1]);
   const sort = params.getAll('sort');
+  const search = params.getAll('search');
+  const searchBy = params.getAll('searchby');
 
   return {
     category: category,
@@ -19,5 +21,7 @@ export function getQuery() {
     stockMIN: stockMIN,
     stockMAX: stockMAX,
     sort: sort,
+    search: search,
+    searchBy: searchBy,
   };
 }

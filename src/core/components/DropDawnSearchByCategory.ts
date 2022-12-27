@@ -54,9 +54,7 @@ export class DropDawnSearch {
 
     arrow.addEventListener('click', () => {
       if (arrow.classList.contains('filtered')) {
-        // this.clearList();
         params.delete(this.classPrefix);
-        this.render(this.classPrefix);
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       }
     });
@@ -70,7 +68,7 @@ export class DropDawnSearch {
 
     const list = document.createElement('ul');
     list.className = 'drop-down__select dd-trigger';
-
+    // console.log(listFields);
     listFields.forEach((field) => {
       const elementOfList = document.createElement('li');
       elementOfList.className = 'li-container dd-trigger';
