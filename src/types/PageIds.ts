@@ -4,7 +4,7 @@ import { IData } from '../types/dataJSON';
 const data: IData[] = dataJSON.products;
 const dataId: string[] = [];
 data.forEach((item) => {
-  dataId.push(`product/${item.id}`);
+  dataId.push(`/product/${item.id}`);
 });
 
 export const PageIds: { [props: string]: string | string[] } = {

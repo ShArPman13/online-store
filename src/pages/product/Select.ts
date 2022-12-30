@@ -44,27 +44,45 @@ export default class SelectProduct {
   static chooseProduct() {
     document.addEventListener('click', (e: Event) => {
       const elem = <HTMLElement>e.target;
-      if (!elem.closest('.card-small-container') || elem.classList.contains('bottom-container__basketImg'))
+      if (
+        ((!elem.closest('.card-small-container') || elem.classList.contains('bottom-container__basketImg')) &&
+          !elem.closest('.basket-item-container')) ||
+        elem.closest('.basket__price-container')
+      )
         return false;
-      const id = Number(elem.closest('.card-small-container')?.className.replace(/[\D]+/g, ''));
+      const id = Number(
+        (elem.closest('.card-small-container') || elem.closest('.basket-item-container'))?.className.replace(
+          /[\D]+/g,
+          ''
+        )
+      );
       const findItem = data.find((el) => el.id === id);
-      // eslint-disable-next-line no-console
-      console.log(findItem);
       if (findItem == undefined) return false;
       const card = new Product('123', findItem);
       const main = document.getElementById('root');
       if (main == null) return false;
       main.innerHTML = ``;
       main.append(card.render());
-      window.location.hash = `#Product/${findItem.id}`;
+      window.location.hash = `#/product/${findItem.id}`;
     });
   }
 
   static addAndRemoveInBasket() {
     document.addEventListener('click', (e: Event) => {
       const elem = <HTMLElement>e.target;
-      if (!elem.classList.contains('bottom-container__basketImg')) return false;
-      const id = Number(elem.closest('.card-small-container')?.className.replace(/[\D]+/g, ''));
+      if (
+        !elem.classList.contains('bottom-container__basketImg') &&
+        !elem.classList.contains('btn-container__basket') &&
+        !elem.classList.contains('btn-container__fastBuy')
+      )
+        return false;
+
+      // eslint-disable-next-line no-console
+      console.log('asda');
+
+      const id = Number(
+        (elem.closest('.card-small-container') || elem.closest('.card-container'))?.className.replace(/[\D]+/g, '')
+      );
       const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
       const findItem = data.find((el) => el.id === id);
       if (stringArray == null) {
