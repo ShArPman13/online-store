@@ -1,5 +1,6 @@
 import { Page } from '../../core/templates/page';
 import { IData } from '../../types/dataJSON';
+import ModalWindow from '../modalWindow/modalWindow';
 
 export class Product extends Page {
   container = document.createElement('div');
@@ -84,7 +85,6 @@ export class Product extends Page {
   chooseButton() {
     const containerBtn = document.createElement('div');
     containerBtn.className = 'btn-container';
-
     const addInBasket = document.createElement('button');
     addInBasket.className = 'btn-container__basket';
     addInBasket.innerText = 'Add in Basket';
@@ -94,21 +94,62 @@ export class Product extends Page {
     fastBuy.innerText = 'Fast buy';
     containerBtn.append(addInBasket, fastBuy);
 
-    addInBasket.addEventListener('click', (e) => {
-      // eslint-disable-next-line no-console
-      console.log('addInBasket', e);
+    const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+    if (stringArray !== null) {
+      const locStor = JSON.parse(stringArray);
+      if (locStor.find((i: IData) => i.id == this.id)) {
+        addInBasket.innerText = 'Drop from basket';
+        addInBasket.classList.toggle('in-basket');
+      } else {
+        addInBasket.innerText = 'Add in Basket';
+      }
+    } else {
+      addInBasket.innerText = 'Add in Basket';
+    }
+
+    addInBasket.addEventListener('click', () => {
+      addInBasket.classList.toggle('in-basket');
+      if (addInBasket.classList.contains('in-basket')) {
+        addInBasket.innerText = 'Drop from basket';
+      } else {
+        addInBasket.innerText = 'Add in Basket';
+      }
     });
 
-    fastBuy.addEventListener('click', (e) => {
-      // eslint-disable-next-line no-console
-      console.log('fastBuy', e);
+    fastBuy.addEventListener('click', () => {
+      const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+      if (stringArray !== null) {
+        const locStor = JSON.parse(stringArray);
+        if (locStor.find((i: IData) => i.id == this.id)) {
+          window.location.hash = `/basket`;
+          const modal = new ModalWindow();
+          setTimeout(() => {
+            const basket = document.querySelectorAll('.basket')[0];
+            basket.append(modal.render());
+          }, 50);
+        } else {
+          window.location.hash = `/basket`;
+          const modal = new ModalWindow();
+          setTimeout(() => {
+            const basket = document.querySelectorAll('.basket')[0];
+            basket.append(modal.render());
+          }, 50);
+        }
+      } else {
+        window.location.hash = `/basket`;
+        const modal = new ModalWindow();
+        setTimeout(() => {
+          const basket = document.querySelectorAll('.basket')[0];
+          basket.append(modal.render());
+        }, 50);
+      }
     });
 
     return containerBtn;
   }
 
   render() {
-    this.container.className = `card-container`;
+    this.container.className = `card-container ${this.id}`;
 
     const path = document.createElement('div');
     path.className = 'card-container__path';
