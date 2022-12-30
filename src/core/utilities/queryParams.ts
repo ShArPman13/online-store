@@ -13,6 +13,8 @@ export function getQuery() {
   const search = params.getAll('search');
   const searchBy = params.getAll('searchby');
   const view = params.getAll('view');
+  const limit = params.getAll('limit')[0];
+  const page = params.getAll('page')[0];
 
   return {
     category: category,
@@ -25,6 +27,8 @@ export function getQuery() {
     search: search,
     searchBy: searchBy,
     view: view,
+    limit: limit,
+    page: page,
   };
 }
 
@@ -37,6 +41,11 @@ export function delAllQuery() {
   params.delete('search');
   params.delete('searchby');
   params.delete('view');
+}
+
+export function delAllQueryBasket() {
+  params.delete('limit');
+  params.delete('page');
 }
 
 export function copyQuery() {
