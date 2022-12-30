@@ -68,7 +68,7 @@ export class App {
       } else {
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
         } else {
-          this.renderNewPage(`/store`);
+          this.renderNewPage(`${hash.slice(0, hash.indexOf('?'))}`);
         }
       }
     };

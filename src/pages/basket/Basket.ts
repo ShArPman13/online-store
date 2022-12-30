@@ -4,6 +4,7 @@ import { IData } from '../../types/dataJSON';
 import { PromoCode } from '../../core/components/promocode';
 import addPricePromo from '../../core/components/addPricePromo';
 import ModalWindow from '../modalWindow/modalWindow';
+import { params, getQuery, delAllQuery } from '../../core/utilities/queryParams';
 
 export class Basket extends Page {
   static textObject = {
@@ -51,10 +52,16 @@ export class Basket extends Page {
     inputRows.type = 'number';
     inputRows.id = 'amount-rows__input';
     inputRows.value = `${locStor.length}`;
+    if (getQuery().limit !== undefined) inputRows.value = getQuery().limit;
+
     amountRows.append(textRows, inputRows);
 
     inputRows.addEventListener('input', () => {
+      if (+inputRows.value < 1) inputRows.value = '1';
       document.querySelectorAll('.amount-pages__page')[0].innerHTML = '1';
+      delAllQuery();
+      params.set('limit', inputRows.value);
+      window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
       this.changeAmountItems();
       addPricePromo();
     });
@@ -87,6 +94,8 @@ export class Basket extends Page {
     page.className = 'amount-pages__page';
     page.innerText = '1';
 
+    if (getQuery().page !== undefined) page.innerText = getQuery().page;
+
     const buttonPlus = document.createElement('button');
     buttonPlus.className = 'amount-rows__button-plus';
     buttonPlus.innerText = '+';
@@ -103,6 +112,8 @@ export class Basket extends Page {
       const currentPage = document.querySelectorAll('.amount-pages__page')[0];
       if (Number(currentPage.innerHTML) === pages) return false;
       currentPage.innerHTML = `${Number(currentPage.innerHTML) + 1}`;
+      params.set('page', currentPage.innerHTML);
+      window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
       this.changeAmountItems();
       addPricePromo();
     });
@@ -113,6 +124,8 @@ export class Basket extends Page {
       const currentPage = document.querySelectorAll('.amount-pages__page')[0];
       if (Number(currentPage.innerHTML) === 1) return false;
       currentPage.innerHTML = `${Number(currentPage.innerHTML) - 1}`;
+      params.set('page', currentPage.innerHTML);
+      window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
       this.changeAmountItems();
       addPricePromo();
     });
@@ -132,6 +145,14 @@ export class Basket extends Page {
     if (stringArray !== null) {
       locStor = JSON.parse(stringArray);
       if (newlocStor) locStor = newlocStor;
+      else {
+        if (getQuery().limit !== undefined) {
+          let page: string;
+          if (getQuery().page == undefined) page = '1';
+          else page = getQuery().page;
+          locStor = locStor.splice((+page - 1) * +getQuery().limit, +getQuery().limit);
+        }
+      }
       locStor.forEach((item) => {
         const product = new BasketItem(item);
         basketItems.append(product.render());
@@ -142,6 +163,7 @@ export class Basket extends Page {
   }
 
   render() {
+    delAllQuery();
     this.container.className = 'basket';
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
     if (stringArray == null || stringArray === undefined) {
@@ -180,10 +202,6 @@ export class Basket extends Page {
     totalPricesContainer.append(totalPrices);
 
     pricesContainer.append(totalText, totalPricesContainer);
-
-    // const totalByu = document.createElement('button');
-    // totalByu.className = 'prices-container__byu';
-    // totalByu.innerHTML = `Byu All`;
 
     totalContainer.append(pricesContainer, this.clickButtonByu());
     this.container.append(this.pagination(), this.addProduct(), this.checkPromoCode(), totalContainer);

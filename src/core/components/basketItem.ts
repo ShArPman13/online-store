@@ -2,6 +2,7 @@ import { IData } from '../../types/dataJSON';
 import SelectProduct from '../../pages/product/Select';
 import { App } from '../../pages/app';
 import addPricePromo from './addPricePromo';
+import { params } from '../../core/utilities/queryParams';
 
 export class BasketItem {
   container = document.createElement('div');
@@ -158,8 +159,13 @@ export class BasketItem {
               locStor.splice(findIndex, 1);
               localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
             }
+            if (document.querySelectorAll('.basket-item-container').length === 1) {
+              params.set('page', `${+params.getAll('page')[0] - 1}`);
+              amount.innerText = `${amountProduct}`;
+            }
             const app = new App();
-            app.renderNewPage(window.location.hash.slice(1));
+            window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
+            app.renderNewPage('/basket');
           }
         }
       }

@@ -1,4 +1,5 @@
 import CheckInput from './checkInput';
+import { App } from '../app';
 
 export default class ModalWindow {
   render() {
@@ -18,9 +19,7 @@ export default class ModalWindow {
     name.className = 'modul-window__input modul-window__name';
     name.type = 'text';
     name.placeholder = 'Name and Surname';
-    name.setAttribute('data-toggle', 'tooltip');
-    name.setAttribute('data-placement', 'left');
-    name.setAttribute('title', 'topasdasdasd');
+    name.setAttribute('data-tooltip', 'Value contains at least two words, the length of each is at least 3 characters');
 
     nameContainer.append(name);
 
@@ -34,6 +33,7 @@ export default class ModalWindow {
     phone.className = 'modul-window__input modul-window__phone';
     phone.type = 'tel';
     phone.placeholder = 'Phone';
+    phone.setAttribute('data-tooltip', 'Value must start with ' + ', only digits and be at least 9 digits');
 
     phoneContainer.append(phone);
 
@@ -47,6 +47,7 @@ export default class ModalWindow {
     address.className = 'modul-window__input modul-window__address';
     address.type = 'text';
     address.placeholder = 'Address';
+    address.setAttribute('data-tooltip', 'Value contains at least three words, each at least 5 characters long');
 
     addressContainer.append(address);
 
@@ -61,6 +62,7 @@ export default class ModalWindow {
     email.className = 'modul-window__input modul-window__email';
     email.type = 'email';
     email.placeholder = 'Email';
+    email.setAttribute('data-tooltip', 'Value must be email');
 
     emailContainer.append(email);
 
@@ -96,6 +98,7 @@ export default class ModalWindow {
     const numberInput = document.createElement('input');
     numberInput.className = 'modul-window__input card-container__number-container__number-block__input';
     numberInput.type = 'text';
+    numberInput.placeholder = 'XXXX XXXX XXXX XXXX';
 
     numberInput.addEventListener('input', () => {
       CheckInput.checkNumberCard(numberInput);
@@ -113,15 +116,19 @@ export default class ModalWindow {
     dateInfo.className = 'card-container__data-card__date-container__info';
     dateInfo.innerText = 'MM/YY';
 
+    const containerInput = document.createElement('div');
+    containerInput.className = 'date-container__container-input';
+
     const dateInput = document.createElement('input');
     dateInput.className = 'modul-window__input card-container__data-card__date-container__input';
     dateInput.type = 'text';
+    dateInput.placeholder = 'MM/YY';
 
     dateInput.addEventListener('input', () => {
       CheckInput.checkDate(dateInput);
     });
-
-    dateContainer.append(dateInfo, dateInput);
+    containerInput.append(dateInput);
+    dateContainer.append(dateInfo, containerInput);
 
     const cvvContainer = document.createElement('div');
     cvvContainer.className = 'card-container__data-card__cvv-container';
@@ -130,15 +137,21 @@ export default class ModalWindow {
     cvvInfo.className = 'card-container__data-card__cvv-container__info';
     cvvInfo.innerText = 'CVV:';
 
+    const containerInputCvv = document.createElement('div');
+    containerInputCvv.className = 'date-container__container-input';
+
     const cvvInput = document.createElement('input');
     cvvInput.className = 'modul-window__input card-container__data-card__cvv-container__input';
     cvvInput.type = 'number';
+    cvvInput.placeholder = 'CVV';
 
     cvvInput.addEventListener('input', () => {
       CheckInput.checkCvv(cvvInput);
     });
 
-    cvvContainer.append(cvvInfo, cvvInput);
+    containerInputCvv.append(cvvInput);
+
+    cvvContainer.append(cvvInfo, containerInputCvv);
 
     dataCard.append(dateContainer, cvvContainer);
     numberContainer.append(imgContainer, numberBlock);
@@ -185,8 +198,51 @@ export default class ModalWindow {
       const listError = document.querySelectorAll('.modul-window__err');
       if (listError.length === 0) {
         setTimeout(() => {
-          alert('asdasd');
-        }, 300);
+          container.innerHTML = `Congratulations, order is processed!`;
+          container.classList.add('finish');
+        }, 500);
+        setTimeout(() => {
+          background.remove();
+          container.remove();
+          localStorage.clear();
+          const app = new App();
+          app.renderNewPage('/store');
+        }, 3000);
+      }
+    });
+
+    let tooltipElem: HTMLElement;
+
+    container.addEventListener('mouseover', (event) => {
+      const target = <HTMLInputElement>event.target;
+      if (
+        !target.classList.contains('modul-window__name') &&
+        !target.classList.contains('modul-window__phone') &&
+        !target.classList.contains('modul-window__address') &&
+        !target.classList.contains('modul-window__email')
+      )
+        return;
+      const tooltipHtml = (target as HTMLInputElement).dataset.tooltip;
+      if (!tooltipHtml) return;
+      tooltipElem = document.createElement('div');
+      tooltipElem.className = 'tooltip';
+      tooltipElem.innerHTML = tooltipHtml;
+      document.body.append(tooltipElem);
+      if (!target) return;
+      const coords = (target as HTMLInputElement).getBoundingClientRect();
+      let left = coords.left + (target.offsetWidth - tooltipElem.offsetWidth) / 2;
+      if (left < 0) left = 0;
+      let top = coords.top - tooltipElem.offsetHeight - 5;
+      if (top < 0) {
+        top = coords.top + target.offsetHeight + 5;
+      }
+      tooltipElem.style.left = left + 'px';
+      tooltipElem.style.top = top + 'px';
+    });
+
+    document.addEventListener('mouseout', () => {
+      if (tooltipElem) {
+        tooltipElem.remove();
       }
     });
 
