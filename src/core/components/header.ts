@@ -29,7 +29,7 @@ export class Header extends ComponentHeaderFooter {
     navButtons.className = 'header__nav';
     buttons.forEach((button) => {
       const buttonHTML = document.createElement('a');
-      buttonHTML.href = `#${button.id}`;
+      buttonHTML.href = `#${button.id}?`;
       buttonHTML.innerText = button.text;
       navButtons.append(buttonHTML);
     });
