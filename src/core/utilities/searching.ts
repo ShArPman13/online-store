@@ -2,11 +2,10 @@ import { IData } from '../../types/dataJSON';
 import { getQuery } from './queryParams';
 
 export function searching(data: IData[]) {
-  const searchParam = getQuery().search.join();
-  const searchBy = getQuery().searchBy.join();
+  const searchParam = getQuery().search.join().toLowerCase();
   let res: IData[] = [];
 
-  switch (searchBy) {
+  switch (searchParam) {
     case 'Title':
       res = data.filter((item) => item.title.toLowerCase().includes(searchParam));
       break;

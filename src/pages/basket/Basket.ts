@@ -206,13 +206,18 @@ export class Basket extends Page {
     totalContainer.append(pricesContainer, this.clickButtonByu());
     this.container.append(this.pagination(), this.addProduct(), this.checkPromoCode(), totalContainer);
 
-    return this.container;
+    const mainContainer = document.createElement('div');
+    mainContainer.className = 'main-container';
+
+    mainContainer.append(this.container);
+
+    return mainContainer;
   }
 
   clickButtonByu() {
     const totalByu = document.createElement('button');
     totalByu.className = 'prices-container__byu';
-    totalByu.innerHTML = `Byu All`;
+    totalByu.innerHTML = `Buy All`;
 
     totalByu.addEventListener('click', () => {
       const modal = new ModalWindow();
@@ -238,7 +243,7 @@ export class Basket extends Page {
 
     const functionalButton = document.createElement('button');
     functionalButton.className = 'promo-container__functional__button';
-    functionalButton.innerText = 'Enter promo code';
+    functionalButton.innerText = 'Enter promo';
 
     promoFunctional.append(functionalInput, functionalButton);
     promoContainer.append(promoList, promoFunctional);

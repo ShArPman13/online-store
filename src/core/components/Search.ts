@@ -17,8 +17,8 @@ export class Search {
 
     const titleList = document.createElement('span');
     titleList.className = `caption-container__text searching`;
-    titleList.innerText = getQuery().searchBy.join() || 'Choose';
-    if (titleList.innerText !== 'Choose') {
+    titleList.innerText = getQuery().searchBy.join() || 'Category';
+    if (titleList.innerText !== 'Category') {
       arrow.style.display = 'none';
       this.containerCaption.classList.add('filtered');
     }
@@ -57,7 +57,7 @@ export class Search {
     const inputText = document.createElement('input');
     inputText.className = 'search-input';
     inputText.type = 'text';
-    inputText.placeholder = getQuery().search.join() || 'Searching...';
+    inputText.placeholder = getQuery().search.join() || 'Searching by...';
 
     inputText.addEventListener('input', () => {
       params.delete('search');

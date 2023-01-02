@@ -81,7 +81,7 @@ export class Store extends Page {
     clearBTN.innerText = 'CLEAR';
     clearBTN.addEventListener('click', () => {
       delAllQuery();
-      window.location.hash = `/store`;
+      window.location.hash = `/store?`;
     });
 
     const copyBTN = document.createElement('button');
