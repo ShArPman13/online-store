@@ -1,36 +1,77 @@
 #root {
   display: flex;
   justify-content: center;
+  margin: 0 30px;
 }
 
 .main-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-top: 20px;
+  width: 100%;
+  max-width: 1000px;
 }
 
 .container-cards {
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  grid-template-columns: repeat(4, 1fr);
   margin-top: 20px;
-  width: 940px;
-  max-width: 1000px;
+  width: 100%;
   gap: 20px;
+
+  .amount {
+    position: absolute;
+    right: 0;
+    top: -20px;
+  }
 
   .no-result {
     color: rgb(0 0 0);
   }
 
   &.view {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(7, 1fr);
     gap: 15px;
+
+    @media (max-width: 1100px) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    @media (max-width: 700px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
+
+  // &.view1 {
+  //   grid-template-columns: repeat(1, 1fr);
+  //   gap: 15px;
+  // }
 
   &.no-result {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 600px;
+  }
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
 
@@ -41,8 +82,9 @@
   display: flex;
   flex-direction: column;
   padding: 10px 0;
+  width: 100%;
   background-color: rgb(255 255 255 / 97%);
-  gap: 20px;
+  gap: 10px;
 
   .divider {
     width: 100%;
@@ -61,15 +103,11 @@
 
 .filterContainer {
   display: flex;
-  gap: 30px;
+  justify-content: space-between;
+  gap: 10px;
 
-  .search-container {
-    margin-left: auto;
-    width: 38%;
-
-    .caption-container {
-      width: 30%;
-    }
+  @media (max-width: 800px) {
+    flex-direction: column;
   }
 }
 
@@ -79,7 +117,7 @@
 
   .caption-container {
     margin-left: 0;
-    width: 37%;
+    width: 110px;
   }
 
   .containerBTN {
@@ -88,9 +126,8 @@
     gap: 5px;
 
     .clear-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @include flex;
+
       margin-left: auto;
       border: 1px solid rgb(1 1 1);
       border-radius: 3px;
@@ -105,6 +142,31 @@
         color: rgb(255 255 255);
         background-color: rgb(0 0 0);
         transition: 0.2s;
+      }
+    }
+
+    .view-btn {
+      @include flex;
+
+      border: none;
+      border-radius: 3px;
+      width: 35px;
+      height: 35px;
+      background-image: url("../assets/img/view.png");
+      background-size: cover;
+      transition: 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &.view {
+        background-image: url("../assets/img/view1.png");
+      }
+
+      &.view1 {
+        background-image: url("../assets/img/view2.png");
       }
     }
   }

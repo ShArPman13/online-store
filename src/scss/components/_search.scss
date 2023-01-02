@@ -1,7 +1,15 @@
 .search-container {
   display: flex;
-  width: 25%;
+  width: 100%;
+  min-width: 300px;
   gap: 5px;
+
+  @media (max-width: 800px) {
+    .caption-container {
+      width: 30%;
+      min-width: 100px;
+    }
+  }
 }
 
 .search-input {
@@ -9,6 +17,8 @@
   border: 1px solid rgb(201 198 198);
   border-radius: 3px;
   padding: 10px;
+  width: 100%;
+  height: 30px;
   font-family: "Josefin+Sans", "Montserrat", sans-serif;
   font-size: 1rem;
 

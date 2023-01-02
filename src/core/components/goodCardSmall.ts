@@ -1,5 +1,5 @@
 import { IData } from '../../types/dataJSON';
-import { getQuery, params } from '../utilities/queryParams';
+import { getQuery } from '../utilities/queryParams';
 
 export class goodCardSmall {
   container = document.createElement('div');
@@ -19,7 +19,7 @@ export class goodCardSmall {
 
   render() {
     this.container.className = getQuery().view.join()
-      ? `card-small-container view ${this.id}`
+      ? `card-small-container ${getQuery().view.join()} ${this.id}`
       : `card-small-container ${this.id}`;
 
     const imageContainer = document.createElement('div');

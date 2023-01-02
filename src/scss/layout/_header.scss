@@ -1,31 +1,54 @@
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex;
 
-  // margin-bottom: 20px;
   width: 100%;
-  height: 50px;
-  box-shadow:
-    -5px 0 10px #dbdbdb,
-    -5px -5px 10px #fff,;
-  color: rgb(0 0 0);
-  background-color: rgba($color: #fff, $alpha: 90%);
+  height: 70px;
+}
+
+.header-wrapper {
+  @include flex(center, space-between);
+
+  margin: 0 30px;
+  width: 100%;
+  max-width: 1000px;
 }
 
 .header__nav {
-  display: flex;
+  @include font(Montserrat, 1rem, 500);
+  @include flex;
+
   gap: 10px;
 }
 
 .header__basket-container {
-  display: flex;
+  @include flex;
+}
+
+.basket-container__amount-container {
+  @include flex;
+  @include font(Montserrat, 1rem, 300);
+
+  gap: 5px;
 }
 
 .basket-container__info {
-  margin: 0 10px 0 30px;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background-image: url("../assets/img/basket.png");
+  background-size: cover;
 }
 
 .basket-container__score {
-  font-size: 20px;
+  @include flex(center);
+  @include font(Montserrat, 0.9rem, 500);
+
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  padding: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(255 166 0);
 }

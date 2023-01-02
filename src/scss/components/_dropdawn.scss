@@ -1,14 +1,15 @@
 .caption-container {
   position: relative;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   margin: 0;
   border: 1px solid rgb(201 198 198);
   border-radius: 3px;
-  padding: 0.6em 1.4em 0.5em 0.8em;
-  width: 15%;
-  max-width: 100%;
+  padding: 0.5em;
+  width: 125px;
+  height: 30px;
   font-family: sans-serif;
   font-weight: 100;
   font-size: 16px;
@@ -35,10 +36,14 @@
       border: 1px solid transparent;
     }
   }
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 }
 
 .caption-container__text {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .caption-container__arrow {
@@ -64,14 +69,14 @@
 .drop-down-container {
   position: absolute;
   left: 0;
-  top: 50px;
+  top: 35px;
   display: none;
   flex-direction: column;
   align-items: center;
   overflow: auto;
   border-radius: 3px;
   padding: 10px;
-  width: 150%;
+  width: 225px;
   height: 310px;
   box-shadow: 0 5px 19px -3px rgb(0 0 0 / 37%);
   background-color: rgb(255 255 255);
@@ -85,8 +90,8 @@
     display: flex;
 
     &.sorting {
-      width: 95%;
-      height: 150px;
+      width: 150px;
+      height: 170px;
     }
   }
 }
@@ -134,6 +139,13 @@
       cursor: pointer;
     }
   }
+
+  &.search {
+    &:hover {
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  }
 }
 
 .drop-down__items {
@@ -157,4 +169,52 @@
     background-color: rgb(103 103 103);
     transition: 0.25s ease;
   }
+}
+
+.drop-down-container-sliders_price,
+.drop-down-container-sliders_stock, {
+  position: absolute;
+  left: 0;
+  top: 50px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: auto;
+  border-radius: 3px;
+  padding: 15px;
+  width: 300px;
+  height: 70px;
+  box-shadow: 0 5px 19px -3px rgb(0 0 0 / 37%);
+  background-color: rgb(255 255 255);
+
+  &:hover {
+    cursor: auto;
+  }
+
+  &.open {
+    z-index: 2;
+    display: flex;
+    height: 85px;
+    gap: 13px;
+  }
+}
+
+.drop-down__sliders {
+  display: flex;
+}
+
+.caption-container.sliders_price,
+.caption-container.sliders_stock, {
+  width: 80px;
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+}
+
+.drop-down-container.searching {
+  left: 0;
+  width: 125px;
+  height: 200px;
 }

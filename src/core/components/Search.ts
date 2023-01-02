@@ -12,21 +12,26 @@ export class Search {
     this.containerCaption.className = `caption-container searching`;
     this.containerList.className = 'drop-down-container dd-trigger searching';
 
-    const titleList = document.createElement('span');
-    titleList.className = `caption-container__text searching`;
-    titleList.innerText = getQuery().searchBy.join() || '?';
-
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow searching`;
 
+    const titleList = document.createElement('span');
+    titleList.className = `caption-container__text searching`;
+    titleList.innerText = getQuery().searchBy.join() || 'Choose';
+    if (titleList.innerText !== 'Choose') {
+      arrow.style.display = 'none';
+      this.containerCaption.classList.add('filtered');
+    }
+
     document.addEventListener('click', (e: MouseEvent) => {
       const target = <HTMLDivElement>e.target;
+
       if (target.classList.contains(`searching`)) {
         arrow.classList.add('open');
         this.containerList.classList.add('open');
-      } else if (!target.classList.contains('dd-trigger') || target.classList.contains('li-container')) {
-        arrow.classList.remove('open');
+      } else if (!target.classList.contains('dd-trigger')) {
         this.containerList.classList.remove('open');
+        arrow.classList.remove('open');
       }
     });
 
@@ -35,9 +40,11 @@ export class Search {
 
     for (const key of this.text) {
       const elementOfList = document.createElement('li');
-      elementOfList.className = 'li-container dd-trigger searching';
+      elementOfList.className = 'li-container search';
       elementOfList.innerText = key;
       elementOfList.addEventListener('click', () => {
+        this.containerList.classList.remove('open');
+        arrow.classList.remove('open');
         titleList.innerText = key;
         this.containerCaption.classList.add('filtered');
         params.delete('searchby');

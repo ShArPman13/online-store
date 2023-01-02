@@ -149,6 +149,9 @@ export class Product extends Page {
   }
 
   render() {
+    const mainContainer = document.createElement('div');
+    mainContainer.className = 'main-container';
+
     this.container.className = `card-container ${this.id}`;
 
     const path = document.createElement('div');
@@ -158,6 +161,7 @@ export class Product extends Page {
     const product = document.createElement('div');
     product.className = 'card-container__product';
 
+    mainContainer.append(this.container);
     this.container.append(path, product);
 
     const infoContainer = document.createElement('div');
@@ -166,35 +170,35 @@ export class Product extends Page {
     product.append(this.chooseImage(), infoContainer);
 
     const brand = document.createElement('div');
-    brand.className = 'info-container__brand';
+    brand.className = 'info-container-item info-container__brand';
     brand.innerText = `Brand: ${this.brand}`;
 
     const category = document.createElement('div');
-    category.className = 'info-container__category';
+    category.className = 'info-container-item info-container__category';
     category.innerText = `Category: ${this.category}`;
 
     const description = document.createElement('div');
-    description.className = 'info-container__description';
+    description.className = 'info-container-item info-container__description';
     description.innerText = `Description: ${this.description}`;
 
     const discountPercentage = document.createElement('div');
-    discountPercentage.className = 'info-container__discountPercentage';
+    discountPercentage.className = 'info-container-item info-container__discountPercentage';
     discountPercentage.innerText = `Discount Percentage: ${this.discountPercentage}`;
 
     const price = document.createElement('div');
-    price.className = 'info-container__price';
+    price.className = 'info-container-item info-container__price';
     price.innerText = `Price: ${this.price}$`;
 
     const rating = document.createElement('div');
-    rating.className = 'info-container__rating';
+    rating.className = 'info-container-item info-container__rating';
     rating.innerText = `Rating: ${this.rating}`;
 
     const stock = document.createElement('div');
-    stock.className = 'info-container__stock';
+    stock.className = 'info-container-item info-container__stock';
     stock.innerText = `Stock: ${this.stock}`;
 
     const title = document.createElement('div');
-    title.className = 'info-container__title';
+    title.className = 'info-container-item info-container__title';
     title.innerText = `Title: ${this.title}`;
 
     infoContainer.append(
@@ -202,12 +206,12 @@ export class Product extends Page {
       category,
       description,
       discountPercentage,
-      price,
       rating,
       stock,
       title,
+      price,
       this.chooseButton()
     );
-    return this.container;
+    return mainContainer;
   }
 }
