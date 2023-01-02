@@ -32,12 +32,13 @@
   position: relative;
   justify-content: space-between;
   border-radius: 3px;
-  padding: 10px;
+  padding: 20px;
   width: 100%;
-  background-color: rgb(145 145 145);
+  background-color: rgb(175 175 175);
 
   @media (max-width: 500px) {
-    height: 120px;
+    padding: 10px;
+    height: 130px;
   }
 }
 
@@ -132,7 +133,7 @@
 }
 
 .prices-container__total-prices {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .amount-rows__button-minus,
@@ -167,5 +168,27 @@
     color: rgb(255 255 255);
     background-color: rgb(0 0 0);
     transition: 0.2s;
+  }
+}
+
+.button-price__minus,
+.button-price__plus {
+  @include flex;
+
+  border-radius: 3px;
+  width: 35px;
+  height: 35px;
+  transition: 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(255 255 255);
+    background-color: rgb(0 0 0);
+    transition: 0.2s;
+  }
+
+  @media (max-width: 500px) {
+    width: 25px;
+    height: 25px;
   }
 }

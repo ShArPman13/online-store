@@ -3,9 +3,10 @@ import { getQuery } from './queryParams';
 
 export function searching(data: IData[]) {
   const searchParam = getQuery().search.join().toLowerCase();
+  const searchBy = getQuery().searchBy.join();
   let res: IData[] = [];
 
-  switch (searchParam) {
+  switch (searchBy) {
     case 'Title':
       res = data.filter((item) => item.title.toLowerCase().includes(searchParam));
       break;
