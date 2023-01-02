@@ -12,6 +12,7 @@ export default class SelectProduct {
     if (stringArray == null) {
       bastetScore.innerHTML = '0';
       totalAmount.innerHTML = '0';
+      bastetScore.classList.add('null-basket-container__score');
       return false;
     }
     const locStor: IData[] = JSON.parse(stringArray);
@@ -20,6 +21,7 @@ export default class SelectProduct {
       const current = 0;
       bastetScore.innerHTML = `${current}`;
       totalAmount.innerHTML = `${current}`;
+      bastetScore.classList.add('null-basket-container__score');
       return false;
     }
 
@@ -31,6 +33,7 @@ export default class SelectProduct {
         }
       });
     bastetScore.innerHTML = `${current}`;
+    bastetScore.classList.remove('null-basket-container__score');
     let currentAmount = 0;
     locStor.forEach((item) => {
       if (item.amount !== undefined) {
