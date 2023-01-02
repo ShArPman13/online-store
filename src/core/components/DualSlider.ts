@@ -9,6 +9,8 @@ export default class Slider {
   start: number[];
   condition = '';
 
+  stringForParams = '';
+
   createSlider(values: number[], condition: string) {
     this.start = [...values];
     this.condition = condition;
@@ -42,9 +44,9 @@ export default class Slider {
 
     const firstNum = str0.includes('$') ? str0.slice(0, str0.length - 1) : str0;
     const lastNum = str1.includes('$') ? str1.slice(0, str1.length - 1) : str1;
-    const stringForParams = firstNum + '|' + lastNum;
+    this.stringForParams = firstNum + '|' + lastNum;
 
-    params.set(this.condition, stringForParams);
+    params.set(this.condition, this.stringForParams);
     window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
   };
 

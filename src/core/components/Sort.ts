@@ -18,7 +18,7 @@ export class Sort {
     const titleList = document.createElement('span');
     titleList.className = `caption-container__text dd-trigger-2 sorting`;
 
-    titleList.innerText = getQuery().sort.length !== 0 ? `${getQuery().sort.join()}` : 'Sorting By';
+    titleList.innerText = getQuery().sort.length !== 0 ? `${getQuery().sort.join()}` : 'Sort';
 
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow dd-trigger-2`;

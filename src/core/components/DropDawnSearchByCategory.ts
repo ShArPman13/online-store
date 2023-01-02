@@ -21,7 +21,7 @@ export class DropDawnSearch {
     this.filteredObject = getFilteredItems(null, this.data);
   }
 
-  render(name: string, listFields?: string[]) {
+  render(name: string, listFields?: string[], items?: number[]) {
     this.containerCaption.className = `caption-container dd-trigger-2${this.classPrefix}`;
     this.containerList.className = 'drop-down-container dd-trigger';
 
@@ -63,12 +63,11 @@ export class DropDawnSearch {
     if (!listFields || listFields.length === 0) {
       listFields = [...this.categories];
     }
-
     this.containerList.innerHTML = '';
 
     const list = document.createElement('ul');
     list.className = 'drop-down__select dd-trigger';
-    listFields.forEach((field) => {
+    listFields.forEach((field, i) => {
       const elementOfList = document.createElement('li');
       elementOfList.className = 'li-container dd-trigger';
 
@@ -87,7 +86,15 @@ export class DropDawnSearch {
       const itemsInCategory = document.createElement('span');
       itemsInCategory.className = 'drop-down__items dd-trigger';
 
-      itemsInCategory.innerText = String(this.itemsInCategory(field, this.classPrefix));
+      if (items && items.length !== 0) {
+        itemsInCategory.innerText = `${items[i]}`;
+        if (items[i] === 0) {
+          inputLabel.style.opacity = '0.3';
+          input.disabled = true;
+        }
+      } else {
+        itemsInCategory.innerText = String(this.itemsInCategory(field, this.classPrefix));
+      }
 
       elementOfList.append(input, inputLabel, itemsInCategory);
       this.checkboxes.push(input);

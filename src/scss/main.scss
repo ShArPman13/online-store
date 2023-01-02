@@ -1,4 +1,5 @@
 @import "./abstract/fonts";
+@import "./abstract/mixins";
 @import "./base/normalize";
 @import "./modalWindow/modalWindow";
 @import "./basket/basket";
@@ -11,4 +12,4 @@
 @import "./components/basketItem";
 @import "./product/product";
 @import "./layout/main";
-@import "./components/dualslider"
+@import "./components/dualslider";

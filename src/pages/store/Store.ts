@@ -13,6 +13,8 @@ import { Sort } from '../../core/components/Sort';
 import { sorting } from '../../core/utilities/sorting';
 import { Search } from '../../core/components/Search';
 import { searching } from '../../core/utilities/searching';
+import { howManyItemsBySearch } from '../../core/utilities/howManyItemsBySearch';
+import { dropDownForSlider } from '../../core/components/DropDownForSlider';
 
 const data: IData[] = dataJSON.products;
 
@@ -40,6 +42,14 @@ export class Store extends Page {
   categoriesChecked: string[] = [];
   brandsChecked: string[] = [];
 
+  brands: string[];
+  category: string[];
+
+  searchData: IData[] = [];
+
+  dropDownForSliderPrice: dropDownForSlider;
+  dropDownForSliderStock: dropDownForSlider;
+
   constructor(id: string) {
     super(id);
     this.container.className = 'main-container';
@@ -52,6 +62,12 @@ export class Store extends Page {
 
     this.sortList = new Sort();
     this.search = new Search();
+
+    this.brands = this.brandArrayActualByCategory(getQuery().category);
+    this.category = this.categoryArrayActualByBrand(getQuery().brand);
+
+    this.dropDownForSliderPrice = new dropDownForSlider();
+    this.dropDownForSliderStock = new dropDownForSlider();
   }
 
   render() {
@@ -80,19 +96,38 @@ export class Store extends Page {
     });
 
     const viewBTN = document.createElement('button');
-    viewBTN.className = 'clear-btn';
-    viewBTN.innerText = 'VIEW';
+    if (params.getAll('view')[0]) {
+      viewBTN.className = `${params.getAll('view')[0]} view-btn`;
+    } else {
+      viewBTN.className = 'view-btn';
+    }
+
     viewBTN.addEventListener('click', () => {
-      if (getQuery().view.join() === 'view') {
-        params.delete('view');
-        this.cardContainer.classList.remove('view');
-      } else {
+      if (!getQuery().view.join()) {
         params.append('view', 'view');
         setTimeout(() => {
           this.cardContainer.classList.add('view');
-        }, 50);
+          viewBTN.classList.add('view');
+        }, 0);
+      } else if (getQuery().view.join() === 'view') {
+        setTimeout(() => {
+          viewBTN.classList.remove('view');
+          // viewBTN.classList.add('view1');
+          this.cardContainer.classList.remove('view');
+          // this.cardContainer.classList.remove('view1');
+        }, 0);
+        params.delete('view');
+        // params.append('view', 'view1');
       }
-      window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
+      //  else {
+      //   setTimeout(() => {
+      //     viewBTN.classList.remove('view1');
+      //     this.cardContainer.classList.remove('view');
+      //   }, 0);
+      //   params.delete('view');
+      // }
+
+      window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store?`;
     });
 
     const containerBTN = document.createElement('div');
@@ -108,12 +143,14 @@ export class Store extends Page {
     const sliderContainer = document.createElement('div');
     sliderContainer.className = 'sliderContainer';
 
-    const brands = this.brandArrayActualByCategory(getQuery().category);
-    const category = this.categoryArrayActualByBrand(getQuery().brand);
+    const goodsB = this.getActualBrands(this.searchData);
+    const goodsC = this.getActualCategories(this.searchData);
 
     filtersContainer.append(
-      this.dropDawnSearchByCategory.render('Category', category),
-      this.dropDawnSearchByBrand.render('Brands', brands),
+      this.dropDawnSearchByCategory.render('Category', this.category, goodsC),
+      this.dropDawnSearchByBrand.render('Brands', this.brands, goodsB),
+      this.dropDownForSliderPrice.render(this.sliderPrice, 'Price'),
+      this.dropDownForSliderStock.render(this.sliderStock, 'Stock'),
       this.search.render()
     );
 
@@ -122,12 +159,7 @@ export class Store extends Page {
     this.dualSliderPrice.createSlider(getMinMax(data, 'price'), 'price');
     this.dualSliderStock.createSlider(getMinMax(data, 'stock'), 'stock');
 
-    // this.dualSliderPrice.updateValues(getQuery().priceMIN, getQuery().priceMAX);
-    // this.dualSliderStock.updateValues(getQuery().stockMIN, getQuery().stockMAX);
-
-    sliderContainer.append(this.sliderPrice, this.sliderStock);
-
-    this.searchContainer.append(filtersContainer, sortContainer, divider, sliderContainer);
+    this.searchContainer.append(filtersContainer, sortContainer);
 
     this.container.append(this.searchContainer, this.getItemCards());
 
@@ -135,7 +167,9 @@ export class Store extends Page {
   }
 
   getItemCards = () => {
-    this.cardContainer.className = getQuery().view.join() === 'view' ? 'container-cards view' : 'container-cards';
+    this.cardContainer.className = getQuery().view.join()
+      ? `container-cards ${getQuery().view.join()}`
+      : 'container-cards';
     if (params.toString()) {
       this.getItemsToRenderAfterFiltres();
     } else {
@@ -148,7 +182,7 @@ export class Store extends Page {
   };
 
   categoryArray = () => {
-    return [...new Set(data.map((item) => <keyof IData>item.category))];
+    return [...new Set(sorting(data).map((item) => <keyof IData>item.category))];
   };
 
   brandArray = () => {
@@ -178,8 +212,26 @@ export class Store extends Page {
     return [...new Set(res)];
   };
 
+  getActualBrands(data: IData[]) {
+    const items: number[] = [];
+    this.brands.forEach((brand) => {
+      items.push(howManyItemsBySearch(data, brand, getQuery().category, 'brand'));
+    });
+    return items;
+  }
+  getActualCategories(data: IData[]) {
+    const items: number[] = [];
+    this.category.forEach((categ) => {
+      items.push(howManyItemsBySearch(data, categ, getQuery().brand, 'category'));
+    });
+    return items;
+  }
+
   filter(items: IData[]) {
     this.cardContainer.innerHTML = '';
+    const amount = document.createElement('div');
+    amount.className = 'amount';
+    amount.innerText = `Found: ${this.searchData.length}`;
 
     if (items.length === 0) {
       const noResults = document.createElement('span');
@@ -188,6 +240,7 @@ export class Store extends Page {
       this.cardContainer.classList.add('no-result');
       this.cardContainer.append(noResults);
     } else {
+      this.cardContainer.append(amount);
       items.forEach((item) => {
         const card = new goodCardSmall(item);
         this.cardContainer.classList.remove('no-result');
@@ -203,21 +256,27 @@ export class Store extends Page {
     const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrCatFilter, getQuery().priceMIN, getQuery().priceMAX);
     const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, getQuery().stockMIN, getQuery().stockMAX);
     const sortData = sorting(dataAfterStockFilter);
-    const searchData = searching(sortData);
-    this.filter(searchData);
+    this.searchData = searching(sortData);
+    this.filter(this.searchData);
   }
 
   applyAllFilters() {
     const actualise = () => {
       getQuery();
-      const brands = this.brandArrayActualByCategory(getQuery().category);
-      this.dropDawnSearchByBrand.clearList();
-      this.dropDawnSearchByBrand.render('Brands', brands);
-      const category = this.categoryArrayActualByBrand(getQuery().brand);
-      this.dropDawnSearchByCategory.clearList();
-      this.dropDawnSearchByCategory.render('Category', category);
 
       this.getItemsToRenderAfterFiltres();
+
+      this.brands = this.brandArrayActualByCategory(getQuery().category);
+      this.category = this.categoryArrayActualByBrand(getQuery().brand);
+
+      const goodsB = this.getActualBrands(this.searchData);
+      const goodsC = this.getActualCategories(this.searchData);
+
+      this.dropDawnSearchByBrand.clearList();
+      this.dropDawnSearchByBrand.render('Brands', this.brands, goodsB);
+
+      this.dropDawnSearchByCategory.clearList();
+      this.dropDawnSearchByCategory.render('Category', this.category, goodsC);
     };
     window.addEventListener('hashchange', actualise);
   }
