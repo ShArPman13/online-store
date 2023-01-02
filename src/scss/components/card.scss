@@ -42,6 +42,82 @@
       display: none;
     }
   }
+
+  // &.view1 {
+  //   flex-direction: row;
+  //   justify-content: space-between;
+  //   width: 100%;
+  //   height: 320px;
+
+  //   .card__image-container {
+  //     display: flex;
+  //     width: 50%;
+  //     height: 100%;
+  //     background-color: rgb(255 255 255);
+
+  //     .image-container__image {
+  //       width: 100%;
+  //       height: 100%;
+  //       object-fit: cover;
+  //     }
+  //   }
+
+  //   .card__bottom-container {
+  //     display: flex;
+  //     flex-direction: column;
+  //     justify-content: space-between;
+
+  //     .bottom-container__text-container {
+  //       display: flex;
+  //       flex-direction: column;
+  //       align-items: flex-end;
+  //       margin-top: 5px;
+
+  //       .text-container__price {
+  //         font-family: "Montserat", sans-serif;
+  //         font-weight: 700;
+  //         font-size: 1.5rem;
+  //         color: rgb(0 0 0);
+  //       }
+
+  //       .text-container__title,
+  //       .text-container__brand {
+  //         padding-top: 7px;
+  //         font-family: "Montserat", sans-serif;
+  //         font-weight: 200;
+  //         font-size: 1rem;
+  //         color: rgb(0 0 0);
+  //       }
+
+  //       .text-container__title {
+  //         font-size: 1rem;
+  //         opacity: 1;
+  //       }
+  //     }
+  //   }
+
+  //   .text-container__title {
+  //     opacity: 1;
+  //   }
+
+  //   &.text-container__title {
+  //     opacity: 1;
+  //   }
+
+  //   &.bottom-container__basketImg {
+  //     opacity: 0.5;
+  //   }
+  // }
+
+  @media (max-width: 500px) {
+    width: 170px;
+    height: 290px;
+  }
+
+  @media (max-width: 420px) {
+    width: 140px;
+    height: 250px;
+  }
 }
 
 .card__image-container {
