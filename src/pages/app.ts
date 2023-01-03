@@ -9,6 +9,7 @@ import dataJSON from '../assets/data/data.json';
 import { IData } from '../types/dataJSON';
 import { Product } from './product/Product';
 import SelectProduct from './product/Select';
+import { Footer } from '../core/components/Footer';
 
 const data: IData[] = dataJSON.products;
 
@@ -16,6 +17,7 @@ export class App {
   private static container: HTMLElement = document.body;
   private initialPage: HomePage;
   private header: Header;
+  private footer: Footer;
 
   previosPage = '';
 
@@ -50,7 +52,7 @@ export class App {
       const containerMain: HTMLElement = document.createElement('main');
       containerMain.id = 'root';
       containerMain.append(pageHtml);
-      App.container.append(this.header.render(), containerMain);
+      App.container.append(this.header.render(), containerMain, this.footer.render());
     }
     SelectProduct.changeCurrentItems();
   }
@@ -80,6 +82,7 @@ export class App {
   constructor() {
     this.initialPage = new HomePage('Home-Page');
     this.header = new Header('header', 'header');
+    this.footer = new Footer('footer', 'footer');
   }
 
   run() {
