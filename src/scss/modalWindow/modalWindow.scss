@@ -1,27 +1,30 @@
 .modul-window {
+  @include flex;
+
   position: fixed;
-  left: calc(50% - 50vw / 2);
-  top: calc(50% - 60vh / 2);
+  left: 50%;
+  top: 50%;
   z-index: 10;
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 50vw;
-  height: 60vh;
+  border-radius: 7px;
+  padding: 15px;
+  min-width: 300px;
+  max-width: 1000px;
   background: #e4e4e4;
+  transform: translate(-50%, -50%);
 }
 
 .modul-window__info {
+  @include font(Montserrat, 0.9rem, 500);
+
   margin: 10px 0 5px;
 }
 
 .modul-window__input {
-  margin-top: 10px;
-  margin-right: 20px;
   border: 1px solid rgb(2 2 2);
-  border-radius: 10px;
+  border-radius: 3px;
   padding-left: 10px;
-  width: 100%;
+  width: 90%;
   height: 25px;
 }
 
@@ -71,22 +74,31 @@
 }
 
 .card-container__info {
+  @include font(Montserrat, 0.9rem, 500);
+
   margin-bottom: 10px;
 }
 
 .card-container__card {
-  display: flex;
+  @include flex;
+
   flex-direction: column;
-  width: 70%;
+  margin-bottom: 20px;
+  border-radius: 10px;
   height: 200px;
   background-color: #a9afcd;
+  gap: 30px;
+
+  @media (max-width: 600px) {
+    height: 150px;
+    gap: 5px;
+  }
 }
 
 .card-container__number-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 25px 0;
   width: 100%;
 }
 
@@ -112,12 +124,17 @@
 
 .card-container__number-container__number-block__input {
   margin: 0;
+  font-size: 0.7rem;
 }
 
 .card-container__data-card {
   display: flex;
   justify-content: center;
-  width: 100%;
+  gap: 10px;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
 }
 
 .card-container__data-card__date-container {
@@ -141,7 +158,7 @@
 .card-container__data-card__date-container__input,
 .card-container__data-card__cvv-container__input {
   margin: 0;
-  width: 100px;
+  width: 60px;
 }
 
 .date-container__container-input {
@@ -151,9 +168,30 @@
 
 .modul-window__button,
 .modul-window__button-close {
+  @include flex;
+
+  border-radius: 3px;
+  width: 30%;
+  height: 35px;
+  min-width: 100px;
+  transition: 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(255 255 255);
+    background-color: rgb(0 0 0);
+    transition: 0.2s;
+  }
+}
+
+.modul-window__button-close {
   margin-top: 10px;
-  width: 150px;
-  height: 30px;
+}
+
+.modul-window__err {
+  @include font(Montserrat, 0.7rem, 300);
+
+  margin-left: 5px;
 }
 
 .finish {

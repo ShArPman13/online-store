@@ -81,7 +81,7 @@ export class Store extends Page {
     clearBTN.innerText = 'CLEAR';
     clearBTN.addEventListener('click', () => {
       delAllQuery();
-      window.location.hash = `/store?`;
+      window.location.hash = `/store`;
     });
 
     const copyBTN = document.createElement('button');
@@ -126,8 +126,7 @@ export class Store extends Page {
       //   }, 0);
       //   params.delete('view');
       // }
-
-      window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store?`;
+      window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
     });
 
     const containerBTN = document.createElement('div');
@@ -232,6 +231,7 @@ export class Store extends Page {
     const amount = document.createElement('div');
     amount.className = 'amount';
     amount.innerText = `Found: ${this.searchData.length}`;
+    window.scrollTo(0, 0);
 
     if (items.length === 0) {
       const noResults = document.createElement('span');
@@ -253,8 +253,13 @@ export class Store extends Page {
 
   getItemsToRenderAfterFiltres() {
     const dataAfterBrCatFilter = getFilteredItems([getQuery().category, getQuery().brand], data);
+
     const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrCatFilter, getQuery().priceMIN, getQuery().priceMAX);
+    if (dataAfterPriceFilter.length !== dataAfterBrCatFilter.length) this.dropDownForSliderPrice.getFilteredPrice();
+
     const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, getQuery().stockMIN, getQuery().stockMAX);
+    if (dataAfterPriceFilter.length !== dataAfterStockFilter.length) this.dropDownForSliderStock.getFilteredStock();
+
     const sortData = sorting(dataAfterStockFilter);
     this.searchData = searching(sortData);
     this.filter(this.searchData);

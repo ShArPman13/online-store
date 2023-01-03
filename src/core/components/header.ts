@@ -10,10 +10,6 @@ const buttons = [
     id: PageIds.StorePage,
     text: 'Shop',
   },
-  // {
-  //   id: PageIds.BasketPage,
-  //   text: 'Basket',
-  // },
 ];
 
 export class Header extends ComponentHeaderFooter {
