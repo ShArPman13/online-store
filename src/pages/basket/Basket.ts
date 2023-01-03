@@ -94,7 +94,7 @@ export class Basket extends Page {
     page.className = 'amount-pages__page';
     page.innerText = '1';
 
-    if (getQuery().page !== undefined) page.innerText = getQuery().page;
+    if (getQuery().page !== undefined && getQuery().page !== 'NaN') page.innerText = getQuery().page;
 
     const buttonPlus = document.createElement('button');
     buttonPlus.className = 'amount-rows__button-plus';
