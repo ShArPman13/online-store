@@ -1,5 +1,5 @@
 import { Page } from '../../core/templates/page';
-import { params } from '../../core/utilities/queryParams';
+import { params, delAllQueryBasket } from '../../core/utilities/queryParams';
 
 export class HomePage extends Page {
   static textObject = {
@@ -11,6 +11,7 @@ export class HomePage extends Page {
   }
 
   render() {
+    delAllQueryBasket();
     const shopButton = document.createElement('a');
     shopButton.className = 'main-container__button';
     shopButton.innerText = 'Go Shopping';
