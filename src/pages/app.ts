@@ -65,7 +65,6 @@ export class App {
         window.location.hash = `/home-page`;
       }
       if (!hash.includes('?')) {
-        // window.location.hash = params.toString() ? `${hash}?${params.toString()}` : `${hash}`;
         this.renderNewPage(hash);
       } else {
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {

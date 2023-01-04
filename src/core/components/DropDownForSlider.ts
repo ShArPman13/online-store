@@ -49,6 +49,9 @@ export class dropDownForSlider {
 
     this.arrow.addEventListener('click', () => {
       if (this.arrow.classList.contains('filtered')) {
+        this.arrow.classList.remove('filtered');
+        this.containerCaption.classList.remove('filtered');
+
         params.delete('price');
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       }
@@ -64,6 +67,9 @@ export class dropDownForSlider {
 
     this.arrow.addEventListener('click', () => {
       if (this.arrow.classList.contains('filtered')) {
+        this.arrow.classList.remove('filtered');
+        this.containerCaption.classList.remove('filtered');
+
         params.delete('stock');
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       }

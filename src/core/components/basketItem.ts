@@ -171,7 +171,7 @@ export class BasketItem {
       }
     });
 
-    buttonPrice.append(buttonPlus, amount, buttonMinus);
+    buttonPrice.append(buttonMinus, amount, buttonPlus);
     priceContainer.append(stock, buttonPrice, priceBlock);
     return priceContainer;
   }
