@@ -10,6 +10,7 @@ import { IData } from '../types/dataJSON';
 import { Product } from './product/Product';
 import SelectProduct from './product/Select';
 import { Footer } from '../core/components/Footer';
+import { params, URLparametrs } from '../core/utilities/queryParams';
 
 const data: IData[] = dataJSON.products;
 
@@ -67,6 +68,9 @@ export class App {
       if (!hash.includes('?')) {
         this.renderNewPage(hash);
       } else {
+        for (const query of params) {
+          if (!(query[0] in URLparametrs)) this.renderNewPage(hash);
+        }
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
         } else {
           this.renderNewPage(`${hash.slice(0, hash.indexOf('?'))}`);
