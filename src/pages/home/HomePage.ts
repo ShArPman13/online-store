@@ -16,11 +16,6 @@ export class HomePage extends Page {
     shopButton.className = 'main-container__button';
     shopButton.innerText = 'Go Shopping';
 
-    // const imgButton = document.createElement('img');
-    // imgButton.src = '../assets/img/back_btn.png';
-
-    // shopButton.append(imgButton);
-
     shopButton.addEventListener('click', () => {
       window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
     });
