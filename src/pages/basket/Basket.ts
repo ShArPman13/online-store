@@ -61,6 +61,7 @@ export class Basket extends Page {
       document.querySelectorAll('.amount-pages__page')[0].innerHTML = '1';
       delAllQuery();
       params.set('limit', inputRows.value);
+      params.set('page', '1');
       window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
       this.changeAmountItems();
       addPricePromo();

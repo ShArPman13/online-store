@@ -4,7 +4,7 @@ import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearch } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
-import { delAllQuery, getQuery, params } from '../../core/utilities/queryParams';
+import { delAllQuery, getQuery, params, delAllQueryBasket } from '../../core/utilities/queryParams';
 import Slider from '../../core/components/DualSlider';
 import { getMinMax } from '../../core/utilities/getMinMax';
 import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
@@ -71,6 +71,7 @@ export class Store extends Page {
   }
 
   render() {
+    delAllQueryBasket();
     this.searchContainer.className = 'searchContainer';
 
     const divider = document.createElement('div');

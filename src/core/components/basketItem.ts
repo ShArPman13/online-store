@@ -2,7 +2,7 @@ import { IData } from '../../types/dataJSON';
 import SelectProduct from '../../pages/product/Select';
 import { App } from '../../pages/app';
 import addPricePromo from './addPricePromo';
-import { params } from '../../core/utilities/queryParams';
+import { params, getQuery } from '../../core/utilities/queryParams';
 
 export class BasketItem {
   container = document.createElement('div');
@@ -152,18 +152,22 @@ export class BasketItem {
         if (stringArray !== null) {
           const locStor: IData[] = JSON.parse(stringArray);
           const findIndex = locStor.findIndex((el) => el.id === this.id);
+          const app = new App();
           if (findIndex !== undefined) {
             if (locStor.length === 1) {
               localStorage.removeItem('onlineStoreShoppingBasket');
+              window.location.hash = `/basket`;
+              app.renderNewPage('/basket');
+              return;
             } else {
               locStor.splice(findIndex, 1);
               localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
             }
             if (document.querySelectorAll('.basket-item-container').length === 1) {
-              params.set('page', `${+params.getAll('page')[0] - 1}`);
+              if (getQuery().page == '1') params.set('page', `${getQuery().page}`);
+              else params.set('page', `${+getQuery().page - 1}`);
               amount.innerText = `${amountProduct}`;
             }
-            const app = new App();
             window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
             app.renderNewPage('/basket');
           }
