@@ -26,7 +26,6 @@ export class App {
     const idPage = idPageSource.toLowerCase();
     document.body.innerHTML = '';
     let page: Page | null = null;
-    console.log(idPage);
     if (idPage === PageIds.HomePage) {
       page = new HomePage(idPage);
     } else if (idPage === PageIds.BasketPage) {
