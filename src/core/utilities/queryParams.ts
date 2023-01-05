@@ -9,7 +9,7 @@ export const URLparametrs = {
   stock: 'stock',
   sort: 'sort',
   search: 'search',
-  searchBy: 'searchBy',
+  searchby: 'searchby',
   view: 'view',
   limit: 'limit',
   page: 'page',
