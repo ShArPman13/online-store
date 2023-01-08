@@ -38,12 +38,12 @@
 .header__basket-container {
   @include flex;
 
-  opacity: 0.8;
-  transition: 0.25s;
+  opacity: 1;
+  transition: 0.2s;
 
   &:hover {
-    opacity: 1;
-    transition: 0.25s;
+    transform: scale(1.05);
+    transition: 0.2s;
   }
 }
 
