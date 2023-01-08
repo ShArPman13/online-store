@@ -80,9 +80,6 @@ export default class SelectProduct {
       )
         return false;
 
-      // eslint-disable-next-line no-console
-      console.log('asda');
-
       const id = Number(
         (elem.closest('.card-small-container') || elem.closest('.card-container'))?.className.replace(/[\D]+/g, '')
       );
