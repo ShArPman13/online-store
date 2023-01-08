@@ -63,6 +63,5 @@ export function delAllQueryBasket() {
 
 export function copyQuery() {
   const query = params.toString();
-  console.log(query);
   return query;
 }
