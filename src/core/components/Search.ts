@@ -4,6 +4,7 @@ export class Search {
   container = document.createElement('div');
   containerList = document.createElement('div');
   containerCaption = document.createElement('div');
+  titleList = document.createElement('span');
 
   text = ['Title', 'Description', 'Price', 'Discount', 'Rating', 'Stock', 'Brand', 'Category'];
 
@@ -15,10 +16,9 @@ export class Search {
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow searching`;
 
-    const titleList = document.createElement('span');
-    titleList.className = `caption-container__text searching`;
-    titleList.innerText = getQuery().searchBy.join() || 'Category';
-    if (titleList.innerText !== 'Category') {
+    this.titleList.className = `caption-container__text searching`;
+    this.titleList.innerText = getQuery().searchBy.join() || 'Category';
+    if (this.titleList.innerText !== 'Category') {
       arrow.style.display = 'none';
       this.containerCaption.classList.add('filtered');
     }
@@ -45,7 +45,7 @@ export class Search {
       elementOfList.addEventListener('click', () => {
         this.containerList.classList.remove('open');
         arrow.classList.remove('open');
-        titleList.innerText = key;
+        this.titleList.innerText = key;
         this.containerCaption.classList.add('filtered');
         params.delete('searchby');
         params.append('searchby', key);
@@ -65,9 +65,16 @@ export class Search {
       window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
     });
     this.containerList.append(list);
-    this.containerCaption.append(titleList, arrow, this.containerList);
+    this.containerCaption.append(this.titleList, arrow, this.containerList);
     this.container.append(inputText, this.containerCaption);
 
     return this.container;
+  }
+
+  refreshTitle() {
+    if (!getQuery().searchBy.join()) {
+      this.titleList.innerText = 'Category';
+      this.containerCaption.classList.remove('filtered');
+    }
   }
 }
