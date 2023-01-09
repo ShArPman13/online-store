@@ -40,7 +40,7 @@ export class dropDownForSlider {
   }
 
   getFilteredPrice() {
-    if (getQuery().priceMIN !== 0 || getQuery().priceMAX !== 1749) {
+    if (params.toString().includes('price')) {
       this.containerCaption.classList.add('filtered');
       this.arrow.classList.add('filtered');
     } else {
@@ -58,7 +58,7 @@ export class dropDownForSlider {
     });
   }
   getFilteredStock() {
-    if (getQuery().stockMIN !== 2 || getQuery().stockMAX !== 150) {
+    if (params.toString().includes('stock')) {
       this.containerCaption.classList.add('filtered');
       this.arrow.classList.add('filtered');
     } else {
@@ -74,5 +74,10 @@ export class dropDownForSlider {
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       }
     });
+  }
+
+  clear() {
+    this.containerList.innerHTML = '';
+    this.containerCaption.innerHTML = '';
   }
 }

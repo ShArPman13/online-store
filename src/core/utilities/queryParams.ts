@@ -1,6 +1,12 @@
 const hash = window.location.hash.slice(1);
 const query = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
-export const params = new URLSearchParams(query);
+export let params = new URLSearchParams(query);
+
+export function refreshParams() {
+  const hash = window.location.hash.slice(1);
+  const query = hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
+  params = new URLSearchParams(query);
+}
 
 export const URLparametrs = {
   category: 'category',
@@ -63,6 +69,5 @@ export function delAllQueryBasket() {
 
 export function copyQuery() {
   const query = params.toString();
-  console.log(query);
   return query;
 }
