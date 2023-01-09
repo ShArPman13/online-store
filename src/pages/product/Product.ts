@@ -49,8 +49,19 @@ export class Product extends Page {
     image.alt = this.title;
 
     mainImage.append(image);
+    const arrSize: string[] = [];
 
     this.images.forEach((image, index) => {
+      const req = new XMLHttpRequest();
+      req.open('GET', image, false);
+      req.send();
+      const size = req.getResponseHeader('content-length');
+      if (size == null) return;
+      if (!arrSize.includes(size)) {
+        arrSize.push(size);
+      } else {
+        return;
+      }
       const container = document.createElement('div');
       if (index === 0) {
         container.className = 'slider-images__container active-slider';
