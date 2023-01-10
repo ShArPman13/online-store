@@ -3,10 +3,11 @@ import { getQuery, params } from '../utilities/queryParams';
 export class Sort {
   containerList = document.createElement('div');
   containerCaption = document.createElement('div');
+  titleList = document.createElement('span');
 
   text = {
-    priceAS: 'Price ascending',
-    priceDES: 'Price descending',
+    PriceAS: 'Price ascending',
+    PriceDES: 'Price descending',
     ratingAS: 'Rating ascending',
     ratingDES: 'Rating descending',
   };
@@ -15,10 +16,8 @@ export class Sort {
     this.containerCaption.className = `caption-container dd-trigger-2 sorting`;
     this.containerList.className = 'drop-down-container dd-trigger sorting';
 
-    const titleList = document.createElement('span');
-    titleList.className = `caption-container__text dd-trigger-2 sorting`;
-
-    titleList.innerText = getQuery().sort.length !== 0 ? `${getQuery().sort.join()}` : 'Sort';
+    this.titleList.className = `caption-container__text dd-trigger-2 sorting`;
+    this.titleList.innerText = getQuery().sort.length !== 0 ? `${getQuery().sort.join()}` : 'Sort';
 
     const arrow = document.createElement('div');
     arrow.className = `caption-container__arrow dd-trigger-2`;
@@ -61,15 +60,21 @@ export class Sort {
         (<HTMLInputElement>elementOfList.firstChild).checked = true;
         params.delete('sort');
         params.append('sort', key);
-        titleList.innerText = key;
+        this.titleList.innerText = key;
         this.containerCaption.classList.add('filtered');
         window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
       });
       list.append(elementOfList);
     }
-
     this.containerList.append(list);
-    this.containerCaption.append(titleList, arrow, this.containerList);
+    this.containerCaption.append(this.titleList, arrow, this.containerList);
     return this.containerCaption;
+  }
+
+  refreshTitle() {
+    if (!getQuery().sort.join()) {
+      this.titleList.innerText = 'Sort';
+      this.containerCaption.classList.remove('filtered');
+    }
   }
 }

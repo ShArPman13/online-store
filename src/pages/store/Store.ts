@@ -4,7 +4,7 @@ import { IData } from '../../types/dataJSON';
 import { goodCardSmall } from '../../core/components/goodCardSmall';
 import { DropDawnSearch } from '../../core/components/DropDawnSearchByCategory';
 import { getFilteredItems } from '../../core/utilities/getFilteredItems';
-import { delAllQuery, getQuery, params, delAllQueryBasket } from '../../core/utilities/queryParams';
+import { delAllQuery, getQuery, params, delAllQueryBasket, refreshParams } from '../../core/utilities/queryParams';
 import Slider from '../../core/components/DualSlider';
 import { getMinMax } from '../../core/utilities/getMinMax';
 import { getFilteredPriceItems } from '../../core/utilities/getFilteredPriceAndStockItems';
@@ -49,6 +49,8 @@ export class Store extends Page {
 
   dropDownForSliderPrice: dropDownForSlider;
   dropDownForSliderStock: dropDownForSlider;
+
+  viewBTN = document.createElement('button');
 
   constructor(id: string) {
     super(id);
@@ -96,43 +98,33 @@ export class Store extends Page {
       }, 1000);
     });
 
-    const viewBTN = document.createElement('button');
     if (params.getAll('view')[0]) {
-      viewBTN.className = `${params.getAll('view')[0]} view-btn`;
+      this.viewBTN.className = `${params.getAll('view')[0]} view-btn`;
     } else {
-      viewBTN.className = 'view-btn';
+      this.viewBTN.className = 'view-btn';
     }
 
-    viewBTN.addEventListener('click', () => {
+    this.viewBTN.addEventListener('click', () => {
       if (!getQuery().view.join()) {
         params.append('view', 'view');
         setTimeout(() => {
           this.cardContainer.classList.add('view');
-          viewBTN.classList.add('view');
+          this.viewBTN.classList.add('view');
         }, 0);
       } else if (getQuery().view.join() === 'view') {
         setTimeout(() => {
-          viewBTN.classList.remove('view');
-          // viewBTN.classList.add('view1');
+          this.viewBTN.classList.remove('view');
           this.cardContainer.classList.remove('view');
-          // this.cardContainer.classList.remove('view1');
         }, 0);
         params.delete('view');
-        // params.append('view', 'view1');
       }
-      //  else {
-      //   setTimeout(() => {
-      //     viewBTN.classList.remove('view1');
-      //     this.cardContainer.classList.remove('view');
-      //   }, 0);
-      //   params.delete('view');
-      // }
+
       window.location.hash = params.toString() ? `/store?${params.toString()}` : `/store`;
     });
 
     const containerBTN = document.createElement('div');
     containerBTN.className = 'containerBTN';
-    containerBTN.append(viewBTN, copyBTN, clearBTN);
+    containerBTN.append(this.viewBTN, copyBTN, clearBTN);
 
     const filtersContainer = document.createElement('div');
     filtersContainer.className = 'filterContainer';
@@ -164,6 +156,20 @@ export class Store extends Page {
     this.container.append(this.searchContainer, this.getItemCards());
 
     return this.container;
+  }
+
+  refreshView() {
+    if (params.toString().includes('view')) {
+      setTimeout(() => {
+        this.cardContainer.classList.add('view');
+        this.viewBTN.classList.add('view');
+      }, 0);
+    } else {
+      setTimeout(() => {
+        this.viewBTN.classList.remove('view');
+        this.cardContainer.classList.remove('view');
+      }, 0);
+    }
   }
 
   getItemCards = () => {
@@ -256,10 +262,8 @@ export class Store extends Page {
     const dataAfterBrCatFilter = getFilteredItems([getQuery().category, getQuery().brand], data);
 
     const dataAfterPriceFilter = getFilteredPriceItems(dataAfterBrCatFilter, getQuery().priceMIN, getQuery().priceMAX);
-    if (dataAfterPriceFilter.length !== dataAfterBrCatFilter.length) this.dropDownForSliderPrice.getFilteredPrice();
 
     const dataAfterStockFilter = getFilteredStockItems(dataAfterPriceFilter, getQuery().stockMIN, getQuery().stockMAX);
-    if (dataAfterPriceFilter.length !== dataAfterStockFilter.length) this.dropDownForSliderStock.getFilteredStock();
 
     const sortData = sorting(dataAfterStockFilter);
     this.searchData = searching(sortData);
@@ -268,6 +272,7 @@ export class Store extends Page {
 
   applyAllFilters() {
     const actualise = () => {
+      refreshParams();
       getQuery();
 
       this.getItemsToRenderAfterFiltres();
@@ -283,6 +288,19 @@ export class Store extends Page {
 
       this.dropDawnSearchByCategory.clearList();
       this.dropDawnSearchByCategory.render('Category', this.category, goodsC);
+
+      this.dropDownForSliderPrice.clear();
+      this.dropDownForSliderPrice.render(this.sliderPrice, 'Price');
+      this.dropDownForSliderPrice.getFilteredPrice();
+
+      this.dropDownForSliderStock.clear();
+      this.dropDownForSliderStock.render(this.sliderStock, 'Stock');
+      this.dropDownForSliderStock.getFilteredStock();
+
+      this.refreshView();
+
+      this.sortList.refreshTitle();
+      this.search.refreshTitle();
     };
     window.addEventListener('hashchange', actualise);
   }

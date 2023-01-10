@@ -10,6 +10,7 @@ export class DropDawnSearch {
   data: IData[] = dataJSON.products;
   classPrefix;
   checkboxes: HTMLInputElement[] = [];
+  pref: string;
 
   private inputCheckedSet: Set<string> = new Set();
   private inputCheckedArray: string[] = [];
@@ -19,6 +20,7 @@ export class DropDawnSearch {
     this.categories = categories;
     this.classPrefix = classPrefix;
     this.filteredObject = getFilteredItems(null, this.data);
+    this.pref = classPrefix;
   }
 
   render(name: string, listFields?: string[], items?: number[]) {

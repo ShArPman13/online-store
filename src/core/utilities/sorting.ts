@@ -6,7 +6,7 @@ export function sorting(data: IData[]) {
   const sortParam = getQuery().sort[0];
 
   switch (sortParam) {
-    case 'priceAS':
+    case 'PriceAS':
       res = data.sort((a, b) => a.price - b.price);
       break;
     case 'ratingAS':
