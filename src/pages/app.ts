@@ -10,7 +10,7 @@ import { IData } from '../types/dataJSON';
 import { Product } from './product/Product';
 import SelectProduct from './product/Select';
 import { Footer } from '../core/components/Footer';
-import { params, URLparametrs } from '../core/utilities/queryParams';
+import { params, URLparametrs, delAllQueryBasket, delAllQuery } from '../core/utilities/queryParams';
 
 const data: IData[] = dataJSON.products;
 
@@ -36,7 +36,7 @@ export class App {
       const id = Number(idPage.replace(/[\D]+/g, ''));
       const findItem = data.find((el) => el.id === id);
       if (findItem == undefined) return false;
-      page = new Product('123', findItem);
+      page = new Product('select-product', findItem);
     } else {
       page = new ErrorPage(idPage, ErrorTypes.Error_404);
     }
@@ -68,7 +68,11 @@ export class App {
         this.renderNewPage(hash);
       } else {
         for (const query of params) {
-          if (!(query[0] in URLparametrs)) this.renderNewPage(hash);
+          if (!(query[0] in URLparametrs)) {
+            delAllQuery();
+            delAllQueryBasket();
+            window.location.hash = `${hash.slice(0, hash.indexOf('?'))}`;
+          }
         }
         if (this.previosPage.slice(0, hash.indexOf('?')) === hash.slice(0, hash.indexOf('?'))) {
         } else {

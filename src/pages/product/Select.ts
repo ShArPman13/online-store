@@ -100,6 +100,7 @@ export default class SelectProduct {
 
       if (locStor.find((i: IData) => i.id == id)) {
         const index: number = locStor.findIndex((item: IData) => item.id == id);
+        if (elem.classList.contains('btn-container__fastBuy')) return;
         if (locStor.length === 1) {
           localStorage.removeItem('onlineStoreShoppingBasket');
           SelectProduct.changeCurrentItems();
