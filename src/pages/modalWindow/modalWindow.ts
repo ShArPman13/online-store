@@ -4,19 +4,19 @@ import { App } from '../app';
 export default class ModalWindow {
   render() {
     const container = document.createElement('div');
-    container.className = 'modul-window';
+    container.className = 'module-window';
 
     const background = document.createElement('div');
-    background.className = 'modul-window-background';
+    background.className = 'module-window-background';
     document.body.append(background);
     const info = document.createElement('div');
-    info.className = 'modul-window__info';
+    info.className = 'module-window__info';
     info.innerText = 'Personal details';
 
     const nameContainer = document.createElement('div');
-    nameContainer.className = 'modul-window__containers';
+    nameContainer.className = 'module-window__containers';
     const name = document.createElement('input');
-    name.className = 'modul-window__input modul-window__name';
+    name.className = 'module-window__input module-window__name';
     name.type = 'text';
     name.placeholder = 'Name and Surname';
     name.setAttribute('data-tooltip', 'Value contains at least two words, the length of each is at least 3 characters');
@@ -24,13 +24,13 @@ export default class ModalWindow {
     nameContainer.append(name);
 
     name.addEventListener('input', () => {
-      CheckInput.checkNameAndAdress(name, 2, 3);
+      CheckInput.checkNameAndAddress(name, 2, 3);
     });
 
     const phoneContainer = document.createElement('div');
-    phoneContainer.className = 'modul-window__containers';
+    phoneContainer.className = 'module-window__containers';
     const phone = document.createElement('input');
-    phone.className = 'modul-window__input modul-window__phone';
+    phone.className = 'module-window__input module-window__phone';
     phone.type = 'tel';
     phone.placeholder = 'Phone';
     phone.setAttribute('data-tooltip', 'Value must start with ' + ', only digits and be at least 9 digits');
@@ -42,9 +42,9 @@ export default class ModalWindow {
     });
 
     const addressContainer = document.createElement('div');
-    addressContainer.className = 'modul-window__containers';
+    addressContainer.className = 'module-window__containers';
     const address = document.createElement('input');
-    address.className = 'modul-window__input modul-window__address';
+    address.className = 'module-window__input module-window__address';
     address.type = 'text';
     address.placeholder = 'Address';
     address.setAttribute('data-tooltip', 'Value contains at least three words, each at least 5 characters long');
@@ -52,14 +52,14 @@ export default class ModalWindow {
     addressContainer.append(address);
 
     address.addEventListener('input', () => {
-      CheckInput.checkNameAndAdress(address, 3, 5);
+      CheckInput.checkNameAndAddress(address, 3, 5);
     });
 
     const emailContainer = document.createElement('div');
-    emailContainer.className = 'modul-window__containers';
+    emailContainer.className = 'module-window__containers';
 
     const email = document.createElement('input');
-    email.className = 'modul-window__input modul-window__email';
+    email.className = 'module-window__input module-window__email';
     email.type = 'email';
     email.placeholder = 'Email';
     email.setAttribute('data-tooltip', 'Value must be email');
@@ -71,7 +71,7 @@ export default class ModalWindow {
     });
 
     const cardContainer = document.createElement('div');
-    cardContainer.className = 'modul-window__card-container';
+    cardContainer.className = 'module-window__card-container';
 
     const infoCard = document.createElement('div');
     infoCard.className = 'card-container__info';
@@ -96,7 +96,7 @@ export default class ModalWindow {
     numberBlock.className = 'card-container__number-container__number-block';
 
     const numberInput = document.createElement('input');
-    numberInput.className = 'modul-window__input card-container__number-container__number-block__input';
+    numberInput.className = 'module-window__input card-container__number-container__number-block__input';
     numberInput.type = 'text';
     numberInput.placeholder = 'XXXX XXXX XXXX XXXX';
 
@@ -120,7 +120,7 @@ export default class ModalWindow {
     containerInput.className = 'date-container__container-input';
 
     const dateInput = document.createElement('input');
-    dateInput.className = 'modul-window__input card-container__data-card__date-container__input';
+    dateInput.className = 'module-window__input card-container__data-card__date-container__input';
     dateInput.type = 'text';
     dateInput.placeholder = 'MM/YY';
 
@@ -141,7 +141,7 @@ export default class ModalWindow {
     containerInputCvv.className = 'date-container__container-input';
 
     const cvvInput = document.createElement('input');
-    cvvInput.className = 'modul-window__input card-container__data-card__cvv-container__input';
+    cvvInput.className = 'module-window__input card-container__data-card__cvv-container__input';
     cvvInput.type = 'number';
     cvvInput.placeholder = 'CVV';
 
@@ -159,11 +159,11 @@ export default class ModalWindow {
 
     cardContainer.append(infoCard, card);
     const button = document.createElement('button');
-    button.className = 'modul-window__button';
+    button.className = 'module-window__button';
     button.innerText = 'Submit';
 
     const buttonClose = document.createElement('button');
-    buttonClose.className = 'modul-window__button-close';
+    buttonClose.className = 'module-window__button-close';
     buttonClose.innerText = 'Close';
 
     buttonClose.addEventListener('click', () => {
@@ -172,17 +172,17 @@ export default class ModalWindow {
     });
 
     button.addEventListener('click', () => {
-      const listInput = document.querySelectorAll('.modul-window__input');
+      const listInput = document.querySelectorAll('.module-window__input');
       for (let i = 0; i < listInput.length; i++) {
         const item = <HTMLInputElement>listInput[i];
         const itemParent = item.parentElement;
-        if (listInput[i].classList.contains('modul-window__name') && itemParent) {
-          this.checkError(itemParent, item, CheckInput.checkNameAndAdress(item, 2, 3));
-        } else if (listInput[i].classList.contains('modul-window__phone') && itemParent) {
+        if (listInput[i].classList.contains('module-window__name') && itemParent) {
+          this.checkError(itemParent, item, CheckInput.checkNameAndAddress(item, 2, 3));
+        } else if (listInput[i].classList.contains('module-window__phone') && itemParent) {
           this.checkError(itemParent, item, CheckInput.checkPhone(item));
-        } else if (listInput[i].classList.contains('modul-window__address') && itemParent) {
-          this.checkError(itemParent, item, CheckInput.checkNameAndAdress(item, 3, 5));
-        } else if (listInput[i].classList.contains('modul-window__email') && itemParent) {
+        } else if (listInput[i].classList.contains('module-window__address') && itemParent) {
+          this.checkError(itemParent, item, CheckInput.checkNameAndAddress(item, 3, 5));
+        } else if (listInput[i].classList.contains('module-window__email') && itemParent) {
           this.checkError(itemParent, item, CheckInput.checkEmail(item));
         } else if (
           listInput[i].classList.contains('card-container__number-container__number-block__input') &&
@@ -195,7 +195,7 @@ export default class ModalWindow {
           this.checkError(itemParent, item, CheckInput.checkCvv(item));
         }
       }
-      const listError = document.querySelectorAll('.modul-window__err');
+      const listError = document.querySelectorAll('.module-window__err');
       if (listError.length === 0) {
         setTimeout(() => {
           container.innerHTML = `Congratulations, order is processed!`;
@@ -216,10 +216,10 @@ export default class ModalWindow {
     container.addEventListener('mouseover', (event) => {
       const target = <HTMLInputElement>event.target;
       if (
-        !target.classList.contains('modul-window__name') &&
-        !target.classList.contains('modul-window__phone') &&
-        !target.classList.contains('modul-window__address') &&
-        !target.classList.contains('modul-window__email')
+        !target.classList.contains('module-window__name') &&
+        !target.classList.contains('module-window__phone') &&
+        !target.classList.contains('module-window__address') &&
+        !target.classList.contains('module-window__email')
       )
         return;
       const tooltipHtml = (target as HTMLInputElement).dataset.tooltip;
@@ -256,7 +256,6 @@ export default class ModalWindow {
       button,
       buttonClose
     );
-    // container.append(formContainer, buttonClose);
     return container;
   }
 
@@ -265,7 +264,7 @@ export default class ModalWindow {
     itemParent.append(item);
     if (!func) {
       const err = document.createElement('div');
-      err.className = 'modul-window__err';
+      err.className = 'module-window__err';
       err.innerText = 'Error';
       itemParent.append(err);
     }

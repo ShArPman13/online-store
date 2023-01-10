@@ -6,22 +6,24 @@ const data: IData[] = dataJSON.products;
 
 export default class SelectProduct {
   static changeCurrentItems() {
-    const bastetScore = document.querySelectorAll('.basket-container__score')[0];
+    const basketScore = document.querySelectorAll('.basket-container__score')[0];
     const totalAmount = document.querySelectorAll('.basket-container__total-amount')[0];
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
     if (stringArray == null) {
-      bastetScore.innerHTML = '0';
+      basketScore.innerHTML = '0';
       totalAmount.innerHTML = '0';
-      bastetScore.classList.add('null-basket-container__score');
+      basketScore.classList.add('null-basket-container__score');
       return false;
     }
+
     const locStor: IData[] = JSON.parse(stringArray);
 
     if (locStor.length == 0) {
       const current = 0;
-      bastetScore.innerHTML = `${current}`;
+      basketScore.innerHTML = `${current}`;
       totalAmount.innerHTML = `${current}`;
-      bastetScore.classList.add('null-basket-container__score');
+      basketScore.classList.add('null-basket-container__score');
       return false;
     }
 
@@ -32,9 +34,11 @@ export default class SelectProduct {
           return item + acc;
         }
       });
-    bastetScore.innerHTML = `${current}`;
-    bastetScore.classList.remove('null-basket-container__score');
+
+    basketScore.innerHTML = `${current}`;
+    basketScore.classList.remove('null-basket-container__score');
     let currentAmount = 0;
+
     locStor.forEach((item) => {
       if (item.amount !== undefined) {
         currentAmount += item.price * item.amount;
@@ -42,27 +46,33 @@ export default class SelectProduct {
         currentAmount += item.price;
       }
     });
+
     totalAmount.innerHTML = `${currentAmount}$`;
   }
   static chooseProduct() {
     document.addEventListener('click', (e: Event) => {
       const elem = <HTMLElement>e.target;
+
       if (
         ((!elem.closest('.card-small-container') || elem.classList.contains('bottom-container__basketImg')) &&
           !elem.closest('.basket-item-container')) ||
         elem.closest('.basket__price-container')
       )
         return false;
+
       const id = Number(
         (elem.closest('.card-small-container') || elem.closest('.basket-item-container'))?.className.replace(
           /[\D]+/g,
           ''
         )
       );
+
       const findItem = data.find((el) => el.id === id);
+
       if (findItem == undefined) return false;
       const card = new Product('123', findItem);
       const main = document.getElementById('root');
+
       if (main == null) return false;
       main.innerHTML = ``;
       main.append(card.render());
@@ -73,6 +83,7 @@ export default class SelectProduct {
   static addAndRemoveInBasket() {
     document.addEventListener('click', (e: Event) => {
       const elem = <HTMLElement>e.target;
+
       if (
         !elem.classList.contains('bottom-container__basketImg') &&
         !elem.classList.contains('btn-container__basket') &&
@@ -83,10 +94,13 @@ export default class SelectProduct {
       const id = Number(
         (elem.closest('.card-small-container') || elem.closest('.card-container'))?.className.replace(/[\D]+/g, '')
       );
+
       const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
       const findItem = data.find((el) => el.id === id);
+
       if (stringArray == null) {
         const locStor: IData[] = [];
+
         if (findItem !== undefined) {
           findItem.amount = 1;
           locStor.push(findItem);
@@ -96,11 +110,14 @@ export default class SelectProduct {
         SelectProduct.changeCurrentItems();
         return false;
       }
+
       const locStor = JSON.parse(stringArray);
 
       if (locStor.find((i: IData) => i.id == id)) {
         const index: number = locStor.findIndex((item: IData) => item.id == id);
+
         if (elem.classList.contains('btn-container__fastBuy')) return;
+
         if (locStor.length === 1) {
           localStorage.removeItem('onlineStoreShoppingBasket');
           SelectProduct.changeCurrentItems();
@@ -114,6 +131,7 @@ export default class SelectProduct {
           locStor.push(findItem);
         }
       }
+
       localStorage.setItem('onlineStoreShoppingBasket', JSON.stringify(locStor));
       SelectProduct.changeCurrentItems();
     });
