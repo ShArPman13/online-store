@@ -6,6 +6,19 @@ import addPricePromo from '../../core/components/addPricePromo';
 import ModalWindow from '../modalWindow/modalWindow';
 import { params, getQuery, delAllQuery } from '../../core/utilities/queryParams';
 
+enum NAMEPROMO {
+  RS = 'RS',
+  STAGE = 'Stage2',
+  YEAR = '2023',
+}
+
+enum VALUEPROMO {
+  RS = '10',
+  STAGE = '7',
+  YEAR = '5',
+  DEFAULT = '3',
+}
+
 export class Basket extends Page {
   static textObject = {
     mainTitle: 'Basket Page for Online-Store!',
@@ -20,17 +33,22 @@ export class Basket extends Page {
   changeAmountItems() {
     const inputRows = <HTMLInputElement>document.querySelectorAll('.amount-rows__input')[0];
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
     if (stringArray == null) {
       return;
     }
+
     const locStor: IData[] = JSON.parse(stringArray);
+
     if (Number(inputRows.value) < 1) return false;
+
     const page = +document.querySelectorAll('.amount-pages__page')[0].innerHTML;
     const start = (page - 1) * +inputRows.value;
     const end = +inputRows.value;
     const newlocStor = locStor.splice(start, end);
     const block = document.querySelectorAll('.basket-items')[0];
     const info = document.querySelectorAll('.basket__info-container')[0];
+
     block.remove();
     info.after(this.addProduct(newlocStor));
   }
@@ -41,9 +59,11 @@ export class Basket extends Page {
 
     const textRows = document.createElement('div');
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
     if (stringArray == null) {
       return amountRows;
     }
+
     const locStor: IData[] = JSON.parse(stringArray);
     textRows.className = 'amount-rows__text';
     textRows.innerText = 'Item';
@@ -52,12 +72,14 @@ export class Basket extends Page {
     inputRows.type = 'number';
     inputRows.id = 'amount-rows__input';
     inputRows.value = `${locStor.length}`;
+
     if (getQuery().limit !== undefined) inputRows.value = getQuery().limit;
 
     amountRows.append(textRows, inputRows);
 
     inputRows.addEventListener('input', () => {
       if (+inputRows.value < 1) inputRows.value = '1';
+
       document.querySelectorAll('.amount-pages__page')[0].innerHTML = '1';
       delAllQuery();
       params.set('limit', inputRows.value);
@@ -106,14 +128,19 @@ export class Basket extends Page {
 
     buttonPlus.addEventListener('click', () => {
       const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
       if (stringArray == null) return;
+
       const locStor: IData[] = JSON.parse(stringArray);
       const input = <HTMLInputElement>document.getElementById('amount-rows__input');
       const pages = Math.ceil(locStor.length / +input.value);
       const currentPage = document.querySelectorAll('.amount-pages__page')[0];
+
       if (Number(currentPage.innerHTML) === pages) return false;
+
       currentPage.innerHTML = `${Number(currentPage.innerHTML) + 1}`;
       params.set('page', currentPage.innerHTML);
+
       window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
       this.changeAmountItems();
       addPricePromo();
@@ -121,11 +148,16 @@ export class Basket extends Page {
 
     buttonMinus.addEventListener('click', () => {
       const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
       if (stringArray == null) return;
+
       const currentPage = document.querySelectorAll('.amount-pages__page')[0];
+
       if (Number(currentPage.innerHTML) === 1) return false;
+
       currentPage.innerHTML = `${Number(currentPage.innerHTML) - 1}`;
       params.set('page', currentPage.innerHTML);
+
       window.location.hash = params.toString() ? `/basket?${params.toString()}` : `/basket`;
       this.changeAmountItems();
       addPricePromo();
@@ -138,22 +170,28 @@ export class Basket extends Page {
     const basketItems = document.createElement('div');
     basketItems.className = 'basket-items';
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
     if (stringArray == null || stringArray === undefined) {
       this.container.innerText = 'Basket is empty';
       return this.container;
     }
+
     let locStor: IData[];
     if (stringArray !== null) {
       locStor = JSON.parse(stringArray);
+
       if (newlocStor) locStor = newlocStor;
       else {
         if (getQuery().limit !== undefined) {
           let page: string;
+
           if (getQuery().page == undefined) page = '1';
           else page = getQuery().page;
+
           locStor = locStor.splice((+page - 1) * +getQuery().limit, +getQuery().limit);
         }
       }
+
       locStor.forEach((item) => {
         const product = new BasketItem(item);
         basketItems.append(product.render());
@@ -167,12 +205,15 @@ export class Basket extends Page {
     delAllQuery();
     this.container.className = 'basket';
     const stringArray = localStorage.getItem('onlineStoreShoppingBasket');
+
     if (stringArray == null || stringArray === undefined) {
       this.container.innerText = 'Basket is empty';
       return this.container;
     }
+
     let locStor: IData[];
     let sum = 0;
+
     if (stringArray !== null) {
       locStor = JSON.parse(stringArray);
       locStor.forEach((item) => {
@@ -183,6 +224,7 @@ export class Basket extends Page {
         }
       });
     }
+
     const totalContainer = document.createElement('div');
     totalContainer.className = 'basket__prices';
 
@@ -224,6 +266,7 @@ export class Basket extends Page {
       const modal = new ModalWindow();
       this.container.append(modal.render());
     });
+
     return totalByu;
   }
 
@@ -253,14 +296,23 @@ export class Basket extends Page {
       const input = <HTMLInputElement>document.querySelectorAll('.promo-container__functional__input')[0];
       const block = document.querySelectorAll('.promo-container__list')[0];
       const listPromo = document.querySelectorAll('.list__item__promo-name');
+
       for (let i = 0; i < listPromo.length; i++) {
         if (listPromo[i].innerHTML === input.value) return;
       }
-      let number = '3';
-      if (input.value === 'RS') number = '10';
-      else if (input.value === 'Stage2') number = '7';
-      else if (input.value === '2023') number = '5';
-      else return;
+
+      let number = VALUEPROMO.DEFAULT;
+
+      if (input.value === NAMEPROMO.RS) {
+        number = VALUEPROMO.RS;
+      } else if (input.value === NAMEPROMO.STAGE) {
+        number = VALUEPROMO.STAGE;
+      } else if (input.value === NAMEPROMO.YEAR) {
+        number = VALUEPROMO.YEAR;
+      } else {
+        return;
+      }
+
       const item = new PromoCode(input.value, number);
       input.value = '';
       block.append(item.render());
