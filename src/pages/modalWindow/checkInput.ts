@@ -1,5 +1,5 @@
 export default class CheckInput {
-  static checkNameAndAdress(name: HTMLInputElement, number: number, length: number) {
+  static checkNameAndAddress(name: HTMLInputElement, number: number, length: number) {
     if (name.classList.contains('input__valid')) name.classList.remove('input__valid');
     const arr = name.value.split(' ');
     if (arr.length < number) {
