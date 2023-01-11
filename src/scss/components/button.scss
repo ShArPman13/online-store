@@ -1,0 +1,22 @@
+.main-container__button {
+  @include flex;
+  @include font(Montserrat, 27px, 500);
+
+  margin-bottom: 350px;
+  border: 2px solid rgb(0 0 0);
+  border-radius: 10px;
+  width: 300px;
+  height: 100px;
+  color: rgb(0 0 0);
+  background-size: 50%;
+  background-color: transparent;
+  transition: 0.25s;
+  cursor: pointer;
+
+  &:hover {
+    width: 300px;
+    color: rgb(255 255 255);
+    background-color: rgb(0 0 0);
+    transition: 0.3s ease-out;
+  }
+}

@@ -1,0 +1,134 @@
+.card-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+}
+
+.card-container__path {
+  display: flex;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 10px;
+  text-transform: uppercase;
+  color: rgb(255 255 255);
+  background-color: rgb(213 213 213);
+
+  @media (max-width: 500px) {
+    font-size: 0.7rem;
+  }
+}
+
+.card-container__product {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 3px;
+  padding: 20px;
+  background-color: rgb(175 175 175);
+  gap: 20px;
+
+  @media (max-width: 950px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 3px;
+  padding: 10px;
+  width: 50%;
+  background-color: rgb(255 255 255);
+  gap: 20px;
+
+  .image-container__image {
+    width: 100%;
+  }
+
+  .image-container__main-image {
+    @include flex;
+
+    overflow: hidden;
+    height: 450px;
+
+    @media (max-width: 950px) {
+      height: 300px;
+      max-height: 80%;
+    }
+  }
+
+  @media (max-width: 950px) {
+    width: 100%;
+  }
+}
+
+.image-container__slider-images {
+  display: flex;
+  justify-content: center;
+}
+
+.slider-images__container {
+  display: flex;
+  width: 150px;
+  height: auto;
+  cursor: pointer;
+
+  .slider-images__container__img {
+    margin-right: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.active-slider {
+  border: 2px solid rgb(255 166 0);
+}
+
+.info-container {
+  @include font(Montserrat, 1rem, 500);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  color: rgb(0 0 0);
+  gap: 10px;
+
+  .info-container-item {
+    @include flex;
+
+    border-radius: 3px;
+    padding: 10px;
+    height: max-content;
+    min-height: 50px;
+    background-color: rgb(255 255 255);
+  }
+}
+
+.btn-container {
+  @include flex;
+
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.btn-container__basket,
+.btn-container__fastBuy {
+  @include flex;
+
+  border-radius: 3px;
+  width: 30%;
+  height: 35px;
+  min-width: 100px;
+  transition: 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(255 255 255);
+    background-color: rgb(0 0 0);
+    transition: 0.2s;
+  }
+}
