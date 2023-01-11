@@ -1,4 +1,4 @@
-.modul-window {
+.module-window {
   @include flex;
 
   position: fixed;
@@ -14,13 +14,13 @@
   transform: translate(-50%, -50%);
 }
 
-.modul-window__info {
+.module-window__info {
   @include font(Montserrat, 0.9rem, 500);
 
   margin: 10px 0 5px;
 }
 
-.modul-window__input {
+.module-window__input {
   border: 1px solid rgb(2 2 2);
   border-radius: 3px;
   padding-left: 10px;
@@ -28,7 +28,7 @@
   height: 25px;
 }
 
-.modul-window-background {
+.module-window-background {
   position: fixed;
   left: 0;
   top: 0;
@@ -38,20 +38,20 @@
   background-color: #080606d4;
 }
 
-.modul-window-form {
+.module-window-form {
   display: flex;
   flex-direction: column;
   background-color: rgb(149 195 235);
 }
 
-.modul-window__containers {
+.module-window__containers {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
   width: 80%;
 }
 
-.modul-window__input:focus {
+.module-window__input:focus {
   outline: none;
 }
 
@@ -65,7 +65,7 @@
   color: rgb(2 121 2);
 }
 
-.modul-window__card-container {
+.module-window__card-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -166,8 +166,8 @@
   align-items: center;
 }
 
-.modul-window__button,
-.modul-window__button-close {
+.module-window__button,
+.module-window__button-close {
   @include flex;
 
   border-radius: 3px;
@@ -184,11 +184,11 @@
   }
 }
 
-.modul-window__button-close {
+.module-window__button-close {
   margin-top: 10px;
 }
 
-.modul-window__err {
+.module-window__err {
   @include font(Montserrat, 0.7rem, 300);
 
   margin-left: 5px;
@@ -206,7 +206,7 @@
   font-size: 30px;
 }
 
-.modul-window__name {
+.module-window__name {
   position: relative;
 }
 
